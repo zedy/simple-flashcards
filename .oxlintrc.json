@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "import", "oxc", "promise", "jest"],
+  "categories": {
+    "correctness": "error",
+    "perf": "error",
+    "pedantic": "off",
+    "style": "off",
+    "restriction": "off",
+    "suspicious": "error",
+    "nursery": "off"
+  },
+  "env": {
+    "builtin": true,
+    "node": true,
+    "shared-node-browser": true
+  },
+  "rules": {
+    "eslint/*": "error",
+    "eslint/no-useless-catch": "off",
+    "eslint/no-unused-expressions": "off",
+    "import/*": "error",
+    "import/no-unassigned-import": "off",
+    "typescript/*": "error",
+    "unicorn/*": "error",
+    "oxc/*": "error",
+    "promise/*": "error",
+    "promise/always-return": "off",
+    "jest/*": "error",
+    "jest/valid-expect": "off"
+  },
+  "ignorePatterns": ["openapi"]
+}
