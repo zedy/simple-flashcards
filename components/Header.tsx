@@ -10,25 +10,35 @@ interface HeaderProps {
   title: string;
   showBackButton?: boolean;
   children?: ReactNode;
+  onBackPress?: () => void;
 }
 
-export default function Header({ title, showBackButton = false, children }: HeaderProps) {
+export default function Header({ title, showBackButton = false, children, onBackPress }: HeaderProps) {
   const router = useRouter();
+
+  const handleBackPress = () => {
+    if (onBackPress) {
+      onBackPress();
+    } else {
+      router.back();
+    }
+  };
 
   return (
     <Box
-      backgroundColor="elevation-backgrund-dark-3"
+      backgroundColor="elevation-background-dark-4"
       paddingHorizontal="5"
       paddingVertical="4"
       flexDirection="row"
       alignItems="center"
+      height={68}
       justifyContent="space-between"
       borderBottomColor={"interactive-border-1"}
       borderBottomWidth={1}
     >
       <Box width={40}>
         {showBackButton && (
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={handleBackPress}>
             <ChevronLeft
               size={24}
               color="#DBDBDB"
@@ -42,7 +52,7 @@ export default function Header({ title, showBackButton = false, children }: Head
         alignItems="center"
       >
         <TextView
-          variant="variant-2-bold"
+          variant="variant-4-bold"
           color="interactive-text-dark-1"
         >
           {title}

@@ -19,10 +19,14 @@ export const EmojiPickerDrawer = ({ visible, onClose, onEmojiSelected }: EmojiPi
   return (
     <Box>
       <Drawer visible={visible} onClose={onClose}>
-        <EmojiSelector
-          category={Categories.symbols}
-          onEmojiSelected={handleEmojiSelect}
-        />
+        <Box paddingTop={"10"}>
+          <EmojiSelector
+            showHistory={false}
+            showSectionTitles={false}
+            category={Categories.emotion}
+            onEmojiSelected={handleEmojiSelect}
+          />
+        </Box>
       </Drawer>
     </Box>
   );

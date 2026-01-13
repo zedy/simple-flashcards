@@ -1,0 +1,18 @@
+import Box from "@/components/Box";
+import SetForm from "@/components/forms/SetForm";
+import Header from "@/components/Header";
+
+export default function CreateSetScreen() {
+  return (
+    <Box
+      flex={1}
+      backgroundColor="elevation-background-dark-2"
+    >
+      <Header
+        title="CREATE NEW SET"
+        showBackButton
+      />
+      <SetForm />
+    </Box>
+  );
+}

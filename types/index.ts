@@ -37,8 +37,6 @@ export enum IconButtonSizeEnum {
 
 export enum IconButtonVariantEnum {
   primary = "primary",
-  secondary = "secondary",
-  outlined = "outlined",
   transparent = "transparent",
 }
 

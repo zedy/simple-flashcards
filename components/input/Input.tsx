@@ -47,7 +47,7 @@ export interface InputProps extends BoxProps<Theme> {
   autoCorrect?: boolean;
 }
 
-const Input = ({
+const Input = React.forwardRef<RNTextInput, InputProps>(({
   variant = "outlined",
   type = "input",
   placeholder,
@@ -70,10 +70,25 @@ const Input = ({
   borderColor: customBorderColor,
   backgroundColor: customBackgroundColor,
   ...rest
-}: InputProps) => {
+}, ref) => {
   const theme = useTheme<Theme>();
   const [active, setActive] = useState(false);
   const inputRef = useRef<RNTextInput>(null);
+
+  // Expose the ref to parent components
+  React.useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current?.focus();
+    },
+    blur: () => {
+      inputRef.current?.blur();
+    },
+    clear: () => {
+      inputRef.current?.clear();
+    },
+    isFocused: () => inputRef.current?.isFocused() ?? false,
+    setNativeProps: (props) => inputRef.current?.setNativeProps(props),
+  } as RNTextInput), []);
 
   const handleFocus = () => {
     inputRef?.current?.focus();
@@ -103,6 +118,7 @@ const Input = ({
   const borderColor = customBorderColor ?? getBorderColor(active);
   const labelColor = getLabelColor(active);
   const inputColor = getInputColor(active);
+  const placeholderTextColor = variant === "filled" ? "elevation-background-dark-2" : "interactive-text-dark-1";
   const { marginVertical = "0", ...pressableProps } = rest;
 
   return (
@@ -136,7 +152,7 @@ const Input = ({
         borderColor={borderColor}
         borderWidth={1}
         borderRadius={borderRadius ?? (variant !== "outlined" ? "rounding-button-rounding" : "rounding-input-rounding")}
-        height={type === "textArea" ? 96 : 54}
+        height={type === "textArea" ? 124 : 54}
         paddingHorizontal={variant === "outlined" ? "5" : "height-height-m"}
         paddingVertical={
           variant === "outlined"
@@ -158,8 +174,7 @@ const Input = ({
           editable={!disabled && !onPress}
           accessibilityLabel={label}
           placeholder={placeholder}
-          // placeholderTextColor={theme.colors["text-default-tertiary"]}
-          placeholderTextColor="#111827ff"
+          placeholderTextColor={theme.colors[placeholderTextColor]}          
           style={{
             color: theme.colors[inputColor],
             fontSize: theme.textVariants[textVariant].fontSize,
@@ -181,7 +196,7 @@ const Input = ({
       </Box>
       <Box
         position="absolute"
-        bottom={-18}
+        bottom={-22}
         flexDirection="row"
         alignItems="flex-start"
         justifyContent="space-between"
@@ -198,6 +213,8 @@ const Input = ({
       </Box>
     </Pressable>
   );
-};
+});
+
+Input.displayName = 'Input';
 
 export default Input;

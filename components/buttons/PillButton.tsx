@@ -1,8 +1,8 @@
 import { useTheme } from "@shopify/restyle";
+import { X } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { type ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
 
-import CloseIcon from "@/assets/icons/CloseIcon";
 import type { PillButtonVariant } from "@/types";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
@@ -23,7 +23,7 @@ export interface PillButtonProps {
 }
 
 const PillButton = ({
-  variant = "primary",
+  variant = "filled",
   checked,
   label,
   dismissable,
@@ -52,7 +52,7 @@ const PillButton = ({
       if (pressed) return backgroundColorPressed;
       return backgroundColor;
     },
-    [theme, variant, disabled, checked]
+    [theme, variant, disabled, checked],
   );
 
   const getLabelColor = useCallback(
@@ -68,7 +68,7 @@ const PillButton = ({
       if (pressed) return colorPressed;
       return color;
     },
-    [theme, disabled, variant, checked]
+    [theme, disabled, variant, checked],
   );
 
   const getBorderColor = useCallback((): ThemeColor => {
@@ -121,12 +121,19 @@ const PillButton = ({
       }}
       {...rest}
     >
-      <Text variant={textVariant} color={labelColor} textAlignVertical={"center"}>
+      <Text
+        variant={textVariant}
+        color={labelColor}
+        textAlignVertical={"center"}
+      >
         {label}
       </Text>
       {dismissable && (
-        <Box justifyContent="center" alignItems="center">
-          <CloseIcon color={theme.colors[labelColor]} />
+        <Box
+          justifyContent="center"
+          alignItems="center"
+        >
+          <X color={theme.colors[labelColor]} />
         </Box>
       )}
     </Pressable>

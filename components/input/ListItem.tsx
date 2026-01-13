@@ -102,8 +102,8 @@ const ListItem = ({
 
   return (
     <Pressable
-      paddingTop="3"
-      paddingBottom="2"
+      paddingTop="4"
+      paddingBottom="3"
       paddingHorizontal="4"
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
@@ -124,7 +124,7 @@ const ListItem = ({
             <Text variant="variant-2" color={labelColor}>
               {label}
             </Text>
-            <Text variant="variant-9" color={sublabelColor}>
+            <Text variant="variant-2" color={sublabelColor}>
               {sublabel}
             </Text>
           </Box>
@@ -136,7 +136,7 @@ const ListItem = ({
             {label}
           </Text>
           {sublabel && (
-            <Text variant="variant-9" color={sublabelColor}>
+            <Text variant="variant-2" color={sublabelColor}>
               {sublabel}
             </Text>
           )}

@@ -1,32 +1,38 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { useTheme } from "@shopify/restyle";
-import React, { useCallback, useEffect, useState } from "react";
+import { ChevronDown, SearchIcon } from "lucide-react-native";
+import React, { type ReactElement, useCallback, useEffect, useState } from "react";
 import type { ViewStyle } from "react-native";
 
-import ArrowDropDownIcon from "@/assets/icons/ArrowDownIcon";
-import SearchIcon from "@/assets/icons/SearchIcon";
 import type { InputVariant, SelectType } from "@/types";
 import { getInputInputColor } from "@/utils/inputs";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "../Box";
+import { InfoModal } from "../modals/content/InfoModal";
 import Drawer from "../modals/Drawer";
+import Modal from "../modals/Modal";
 import Pressable from "../Pressable";
 import Text from "../text/Text";
 import Input from "./Input";
 import ListItem from "./ListItem";
 
+interface FallbackAction {
+  callback: () => void;
+  button: string;
+}
+export interface SelectItem {
+  label: string;
+  sublabel?: string;
+  value: string;
+}
 export interface SelectProps {
   variant?: InputVariant;
   type?: SelectType;
   label: string;
   onSelect: (value: string | string[]) => void;
   selectedValue: string | string[];
-  items: {
-    label: string;
-    sublabel?: string;
-    value: string;
-  }[];
+  items: SelectItem[];
   disabled?: boolean;
   error?: string;
   placeholder?: string;
@@ -36,6 +42,9 @@ export interface SelectProps {
   onSecondaryActionPress?: () => void;
   filterable?: boolean;
   style?: ViewStyle;
+  fallbackText?: string;
+  fallbackIcon?: ReactElement;
+  fallbackAction?: FallbackAction;
 }
 
 const Select = ({
@@ -54,8 +63,12 @@ const Select = ({
   onSecondaryActionPress,
   filterable,
   style,
+  fallbackText,
+  fallbackIcon,
+  fallbackAction,
 }: SelectProps) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [fallbackModalVisible, setFallbackModalVisible] = useState(false);
   const theme = useTheme<Theme>();
   const pressed = false;
   const [filterValue, setFilterValue] = useState("");
@@ -68,15 +81,24 @@ const Select = ({
 
   const getInputColor = useCallback(
     (active: boolean): ThemeColor => getInputInputColor(theme, variant, disabled, active, error),
-    [theme, variant, disabled, error]
+    [theme, variant, disabled, error],
   );
 
   const handleOpenDrawer = () => {
-    setDrawerVisible(true);
+    // If items are empty and fallback is provided, show fallback modal
+    if (items.length === 0 && fallbackText) {
+      setFallbackModalVisible(true);
+    } else {
+      setDrawerVisible(true);
+    }
   };
 
   const handleCloseDrawer = () => {
     setDrawerVisible(false);
+  };
+
+  const handleCloseFallbackModal = () => {
+    setFallbackModalVisible(false);
   };
 
   const handleSingleSelect = (value: string) => {
@@ -147,7 +169,10 @@ const Select = ({
   }) => {
     if (item.type === "search") {
       return (
-        <Box backgroundColor="interactive-primary-on" px="4">
+        <Box
+          backgroundColor="interactive-primary-on"
+          px="4"
+        >
           <Input
             label=""
             onChangeText={(text) => setFilterValue(text)}
@@ -182,7 +207,11 @@ const Select = ({
 
   return (
     <>
-      <Pressable onPress={handleOpenDrawer} pointerEvents="box-only" style={style}>
+      <Pressable
+        onPress={handleOpenDrawer}
+        pointerEvents="box-only"
+        style={style}
+      >
         <Input
           label={label}
           placeholder={selectPlaceholder}
@@ -195,7 +224,8 @@ const Select = ({
           }
           onChangeText={() => null}
           variant={variant}
-          rightElement={<ArrowDropDownIcon color={parsedInputColor} />}
+          rightElement={<ChevronDown color={parsedInputColor} />}
+          error={error}
         />
       </Pressable>
       <Drawer
@@ -206,6 +236,7 @@ const Select = ({
         onPrimaryActionPress={onPrimaryActionPress}
         onSecondaryActionPress={onSecondaryActionPress}
         scrollable={false}
+        showCloseButton={false}
       >
         <BottomSheetFlatList
           data={parsedItems}
@@ -218,7 +249,12 @@ const Select = ({
               paddingHorizontal="4"
               paddingVertical={filterable ? "0" : "2"}
             >
-              <Text variant="variant-2">{label}</Text>
+              <Text
+                variant="variant-3-bold"
+                color={"interactive-text-dark-1"}
+              >
+                {label}
+              </Text>
             </Box>
           }
           stickyHeaderIndices={filterable ? [1] : []}
@@ -228,6 +264,20 @@ const Select = ({
           }}
         />
       </Drawer>
+      {fallbackText && (
+        <Modal
+          hideHeader
+          visible={fallbackModalVisible}
+          onClose={handleCloseFallbackModal}
+        >
+          <InfoModal
+            text={fallbackText}
+            icon={fallbackIcon}
+            action={fallbackAction}
+            onClose={handleCloseFallbackModal}
+          />
+        </Modal>
+      )}
     </>
   );
 };

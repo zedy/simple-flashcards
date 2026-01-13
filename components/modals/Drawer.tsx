@@ -15,9 +15,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { Theme } from "@/utils/theme/restyleTheme";
 
 import Box from "../Box";
-import IconButton from "../buttons/IconButton";
 import TextButton from "../buttons/TextButton";
 import ListItem from "../input/ListItem";
+import PressableUI from "../Pressable";
 
 export interface DrawerProps extends Omit<BottomSheetModalProps, "children"> {
   children?: React.ReactNode;
@@ -97,36 +97,41 @@ const Drawer = ({
         <Box
           position={"absolute"}
           right={8}
-          top={-8}
+          top={-18}
           zIndex={1}
         >
-          <IconButton
-            size="m"
-            icon={
-              <X
-                width={24}
-                height={24}
-              />
-            }
+          <PressableUI
             onPress={onClose}
-            variant="transparent"
-          />
+            padding="4"
+            paddingRight="0"
+          >
+            <X
+              width={24}
+              height={24}
+              color={"#DBDBDB"}
+            />
+          </PressableUI>
         </Box>
       )}
+      <Box alignSelf={"center"} width={110} height={4} backgroundColor={"interactive-border-1"} borderRadius={"full"} flexDirection={"row"} justifyContent={"center"}/>
       <Box
         paddingTop="0"
-        backgroundColor="interactive-primary-on"
+        backgroundColor="elevation-background-dark-3"
       >
         {children}
       </Box>
       {hasActions && (
         <Box
-          backgroundColor="interactive-primary-on"
+          backgroundColor="elevation-background-dark-3"
           p="4"
         >
           <ListItem
             label=""
             variant="action"
+            backgroundColor={"transparent"}
+            borderColor={"interactive-border-1"}
+            borderBottomColor={"interactive-border-1"}
+            borderWidth={1}
             leftElement={
               <>
                 {!!primaryActionLabel && (
@@ -143,7 +148,7 @@ const Drawer = ({
                 {!!secondaryActionLabel && (
                   <TextButton
                     label={secondaryActionLabel}
-                    variant="secondary"
+                    variant="secondary"                    
                     onPress={() => onSecondaryActionPress?.()}
                   />
                 )}
@@ -174,15 +179,15 @@ const Drawer = ({
         backgroundColor: "transparent",
       }}
       handleStyle={{
-        backgroundColor: theme.colors["interactive-primary-on"],
+        backgroundColor: theme.colors["elevation-background-dark-3"],
         borderTopLeftRadius: theme.borderRadii["4xl"],
         borderTopRightRadius: theme.borderRadii["4xl"],
+        borderTopColor: theme.colors['interactive-border-1'],
+        borderTopWidth: 2,
         height: 0,
-        // paddingTop: 0,
-        // paddingBottom: 0,
       }}
       backgroundStyle={{
-        backgroundColor: theme.colors["interactive-primary-on"],
+        backgroundColor: theme.colors["elevation-background-dark-3"],
         borderTopLeftRadius: theme.borderRadii["4xl"],
         borderTopRightRadius: theme.borderRadii["4xl"],
       }}
@@ -200,7 +205,7 @@ const Drawer = ({
         {scrollable ? (
           <BottomSheetScrollView
             style={{
-              backgroundColor: theme.colors["interactive-primary-on"],
+              backgroundColor: theme.colors["elevation-background-dark-3"],
             }}
             contentContainerStyle={{
               paddingBottom: Math.max(insets.bottom, 4),

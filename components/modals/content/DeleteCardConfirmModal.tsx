@@ -4,12 +4,12 @@ import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import TextView from "@/components/text/Text";
 
-interface DeleteSetConfirmModalProps {
+interface DeleteCardConfirmModalProps {
   callback: () => void;
   name: string;
 }
 
-export const DeleteSetConfirmModal = ({ callback, name }: DeleteSetConfirmModalProps) => {
+export const DeleteCardConfirmModal = ({ callback, name }: DeleteCardConfirmModalProps) => {
   const handleCallback = () => {
     callback();
   };
@@ -23,7 +23,7 @@ export const DeleteSetConfirmModal = ({ callback, name }: DeleteSetConfirmModalP
         variant={"variant-1-bold"}
         color={"interactive-text-dark-1"}
       >
-        {`This will permanently delete ${name} and all of the cards. This action is not reversible.`}
+        {`This will permanently delete the card. This action is not reversible.`}
       </TextView>
       <Button
         label="Delete"

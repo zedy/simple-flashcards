@@ -10,9 +10,10 @@ export interface ModalProps extends RNModalProps {
   visible: boolean;
   onClose: () => void;
   title?: string;
+  hideHeader?: boolean;
 }
 
-const Modal = ({ visible, onClose, children, title, ...rest }: ModalProps) => {
+const Modal = ({ visible, onClose, children, title, hideHeader, ...rest }: ModalProps) => {
   return (
     <RNModal
       transparent
@@ -38,14 +39,14 @@ const Modal = ({ visible, onClose, children, title, ...rest }: ModalProps) => {
           />
         </TouchableWithoutFeedback>
         <Box
-          backgroundColor="elevation-backgrund-dark-2"
+          backgroundColor="elevation-background-dark-2"
           margin="12"
           borderRadius="2xl"
           borderColor="interactive-border-1"
           borderWidth={1}
           flex={1}
         >
-          <Box padding={"4"} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} paddingBottom={"0"}>
+          {!hideHeader && (<Box padding={"4"} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} paddingBottom={"0"}>
             <TextView color={"interactive-text-dark-1"} variant={"variant-3-bold"}>{title}</TextView>
             <Box alignItems="flex-end">
               <Pressable
@@ -60,7 +61,7 @@ const Modal = ({ visible, onClose, children, title, ...rest }: ModalProps) => {
                 />
               </Pressable>
             </Box>
-          </Box>
+          </Box>)}
           {children}
         </Box>
       </Box>

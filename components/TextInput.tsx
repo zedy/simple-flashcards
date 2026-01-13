@@ -7,6 +7,7 @@ import {
   createBox,
   createRestyleComponent,
 } from "@shopify/restyle";
+import React, { useRef } from "react";
 import { TextInput as RNTextInput, type TextInputProps as RNTextInputProps } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -19,8 +20,18 @@ type TextInputProps = BoxProps<Theme> &
   LayoutProps<Theme> &
   RNTextInputProps;
 
-const TextInput = createRestyleComponent<TextInputProps, Theme>([], createBox<Theme>(RNTextInput));
+const BaseTextInput = createRestyleComponent<TextInputProps, Theme>([], createBox<Theme>(RNTextInput));
 
-export const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+const TextInput = React.forwardRef<RNTextInput, TextInputProps>((props, ref) => {
+  const internalRef = useRef<RNTextInput>(null);
+
+  React.useImperativeHandle(ref, () => internalRef.current as RNTextInput, []);
+
+  return <BaseTextInput {...props} ref={internalRef} />;
+});
+
+TextInput.displayName = 'TextInput';
+
+export const AnimatedTextInput = Animated.createAnimatedComponent(BaseTextInput);
 
 export default TextInput;

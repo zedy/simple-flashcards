@@ -2,7 +2,7 @@ import { useTheme } from "@shopify/restyle";
 import * as Haptics from "expo-haptics";
 import React, { type ReactElement, cloneElement, useCallback, useState } from "react";
 import { ActivityIndicator, type PressableProps } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import type { SvgProps } from "react-native-svg";
 
 import type { IconButtonSize, IconButtonVariant } from "@/types";
@@ -60,7 +60,7 @@ const IconButton = ({
       if (pressed) return backgroundColorPressed;
       return backgroundColor;
     },
-    [theme, variant, disabled]
+    [theme, variant, disabled],
   );
   const getBorderColor = useCallback(
     (pressed: boolean): ThemeColor => {
@@ -73,7 +73,7 @@ const IconButton = ({
       if (pressed) return borderColorPressed;
       return borderColor;
     },
-    [theme, disabled, variant]
+    [theme, disabled, variant],
   );
 
   const getLabelColor = useCallback(
@@ -88,7 +88,7 @@ const IconButton = ({
       if (pressed) return colorPressed;
       return color;
     },
-    [theme, disabled, variant, iconColor]
+    [theme, disabled, variant, iconColor],
   );
 
   const getHitbox = useCallback((): number => {
@@ -149,8 +149,16 @@ const IconButton = ({
     >
       <Animated.View style={animatedStyle}>
         {loading && (
-          <Box width={iconSize ?? 24} height={iconSize ?? 24} alignItems="center" justifyContent="center">
-            <ActivityIndicator color={parsableColor} size="small" />
+          <Box
+            width={iconSize ?? 24}
+            height={iconSize ?? 24}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <ActivityIndicator
+              color={parsableColor}
+              size="small"
+            />
           </Box>
         )}
         {icon && !loading && (

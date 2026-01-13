@@ -12,19 +12,31 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: "#292929",
+          backgroundColor: "#1F1F1F",
           borderTopColor: "#858585",
-          borderTopWidth: 1
+          borderTopWidth: 1,
+          paddingVertical: 10,
+          height: 70,
+        },
+        tabBarItemStyle: {
+          alignItems: "center",
+        },
+        tabBarIconStyle: {
+          marginBottom: 4,
+        },
+        tabBarLabelStyle: {
+          textAlign: "center",
+          fontSize: 14,
         },
       }}
     >
       <Tabs.Screen
         name="index"
-        options={{
+        options={{          
           title: "Sets",
           tabBarIcon: ({ color }) => (
             <LayoutGrid
-              size={24}
+              size={32}
               color={color}
             />
           ),
@@ -33,10 +45,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="add"
         options={{
-          title: "Add",
+          title: "Add Card",
           tabBarIcon: ({ color }) => (
             <Plus
-              size={24}
+              size={32}
               color={color}
             />
           ),
@@ -48,10 +60,40 @@ export default function TabLayout() {
           title: "Settings",
           tabBarIcon: ({ color }) => (
             <Settings
-              size={24}
+              size={32}
               color={color}
             />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="create-set"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="edit-set"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="setcard-page"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="edit-card"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="play"
+        options={{
+          href: null,
         }}
       />
     </Tabs>
