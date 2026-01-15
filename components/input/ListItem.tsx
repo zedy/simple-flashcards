@@ -5,7 +5,6 @@ import type { ListItemVariant } from "@/types";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "../Box";
-import Checkbox from "../buttons/Checkbox";
 import Pressable from "../Pressable";
 import Text from "../text/Text";
 
@@ -116,20 +115,7 @@ const ListItem = ({
       gap="2"
       justifyContent="space-between"
       {...rest}
-    >
-      {variant === "multiple" && (
-        <Box flexDirection="row" alignItems="center" gap="2">
-          <Checkbox id="list-item-checkbox" onChange={handlePress} checked={selected} />
-          <Box>
-            <Text variant="variant-2" color={labelColor}>
-              {label}
-            </Text>
-            <Text variant="variant-2" color={sublabelColor}>
-              {sublabel}
-            </Text>
-          </Box>
-        </Box>
-      )}
+    >      
       {variant === "single" && (
         <Box justifyContent="center" flex={1}>
           <Text variant="variant-2" color={labelColor}>

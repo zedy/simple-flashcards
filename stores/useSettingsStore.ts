@@ -5,6 +5,7 @@ const SETTINGS_STORAGE_KEY = 'flashcard-settings-storage';
 
 interface Settings {
   showProgressBar: boolean;
+  theme: 'light' | 'dark';
 }
 
 interface SettingsStore {
@@ -16,6 +17,7 @@ interface SettingsStore {
 
 const defaultSettings: Settings = {
   showProgressBar: true,
+  theme: 'dark',
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
