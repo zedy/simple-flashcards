@@ -1,9 +1,11 @@
 import { Clipboard } from "lucide-react-native";
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import Animated, { FadeOut, Layout } from "react-native-reanimated";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
+import { ScrollableListWithButton } from "@/components/ScrollableListWithButton";
 import { SwipeableSetCard } from "@/components/SwipeableSetCard";
 import TextView from "@/components/text/Text";
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
@@ -70,34 +72,25 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
           />
         </Box>
       ) : (
-        <Box flex={1} width={"100%"}>
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={styles.scrollViewContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <Box gap={"4"} paddingBottom={"4"}>
-              {sets.map((set) => (
-                <SwipeableSetCard
-                  key={set.id}
-                  data={set}
-                  count={getCardCount(set.id)}
-                  isOpen={openCardId === set.id}
-                  onSwipeChange={handleCardSwipe}
-                />
-              ))}
-            </Box>
-          </ScrollView>
-          <Box width={"100%"} paddingTop={"5"}>
-            <Button
-              label="ADD NEW SET"
-              textVariant="variant-2-bold"
-              onPress={handleAddNewSet}
-              width="l"
-              style={styles.addNewSetBtn}
-            />
-          </Box>
-        </Box>
+        <ScrollableListWithButton
+          buttonLabel="ADD NEW SET"
+          onButtonPress={handleAddNewSet}
+        >
+          {sets.map((set) => (
+            <Animated.View
+              key={set.id}
+              exiting={FadeOut.duration(150)}
+              layout={Layout.springify().damping(15).stiffness(150).delay(130)}
+            >
+              <SwipeableSetCard
+                data={set}
+                count={getCardCount(set.id)}
+                isOpen={openCardId === set.id}
+                onSwipeChange={handleCardSwipe}
+              />
+            </Animated.View>
+          ))}
+        </ScrollableListWithButton>
       )}
     </Box>
   );
@@ -106,12 +99,5 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
 const styles = StyleSheet.create({
   addNewSetBtn: {
     alignSelf: "center",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    paddingBottom: 30,
   },
 });

@@ -137,7 +137,7 @@ const Drawer = ({
                 {!!primaryActionLabel && (
                   <TextButton
                     label={primaryActionLabel}
-                    variant="primary"
+                    variant="primary"                    
                     onPress={() => onPrimaryActionPress?.()}
                   />
                 )}
@@ -148,7 +148,7 @@ const Drawer = ({
                 {!!secondaryActionLabel && (
                   <TextButton
                     label={secondaryActionLabel}
-                    variant="primary"
+                    variant="toast"
                     onPress={() => onSecondaryActionPress?.()}
                   />
                 )}

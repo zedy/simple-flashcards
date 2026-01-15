@@ -1,10 +1,12 @@
 import { useTheme } from "@shopify/restyle";
 import { router } from "expo-router";
 import { IdCardIcon } from "lucide-react-native";
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import Animated, { FadeOut, Layout } from "react-native-reanimated";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
+import { ScrollableListWithButton } from "@/components/ScrollableListWithButton";
 import TextView from "@/components/text/Text";
 import type { Card } from "@/stores/useSetsStore";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
@@ -15,7 +17,7 @@ interface CardListProps {
   cards: Card[];
   setId?: string;
   color: ThemeColor;
-  search: string;
+  search: boolean;
 }
 
 export const CardList = ({ cards, setId, color, search }: CardListProps) => {
@@ -75,41 +77,23 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
           )}
         </Box>
       ) : (
-        <Box
-          flex={1}
-          width={"100%"}
+        <ScrollableListWithButton
+          buttonLabel="ADD NEW CARD"
+          onButtonPress={handleAddNewCard}
         >
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={styles.scrollViewContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <Box
-              gap={"4"}
-              paddingBottom={"4"}
+          {cards.map((card) => (
+            <Animated.View
+              key={card.id}
+              exiting={FadeOut.duration(150)}
+              layout={Layout.springify().damping(15).stiffness(150).delay(130)}
             >
-              {cards.map((card) => (
-                <CardListItem
-                  key={card.id}
-                  data={card}
-                  color={color}
-                />
-              ))}
-            </Box>
-          </ScrollView>
-          <Box
-            width={"100%"}
-            paddingTop={"5"}
-          >
-            <Button
-              label="ADD NEW CARD"
-              textVariant="variant-2-bold"
-              onPress={handleAddNewCard}
-              width="l"
-              style={styles.addNewSetBtn}
-            />
-          </Box>
-        </Box>
+              <CardListItem
+                data={card}
+                color={color}
+              />
+            </Animated.View>
+          ))}
+        </ScrollableListWithButton>
       )}
     </Box>
   );
@@ -118,12 +102,5 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
 const styles = StyleSheet.create({
   addNewSetBtn: {
     alignSelf: "center",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    paddingBottom: 30,
   },
 });

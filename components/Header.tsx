@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { TouchableOpacity } from "react-native";
 
+import Logo from "@/assets/icons/logo.svg";
 import Box from "@/components/Box";
 import TextView from "@/components/text/Text";
 import type { Theme } from "@/utils/theme/restyleTheme";
@@ -12,11 +13,12 @@ interface HeaderProps {
   title: string;
   titleSuffix?: string;
   showBackButton?: boolean;
+  showLogo?: boolean;
   children?: ReactNode;
   onBackPress?: () => void;
 }
 
-export default function Header({ title, titleSuffix, showBackButton = false, children, onBackPress }: HeaderProps) {
+export default function Header({ title, titleSuffix, showBackButton = false, showLogo = false, children, onBackPress }: HeaderProps) {
   const router = useRouter();
   const theme = useTheme<Theme>();
 
@@ -48,6 +50,9 @@ export default function Header({ title, titleSuffix, showBackButton = false, chi
               color={theme.colors["interactive-text-1"]}
             />
           </TouchableOpacity>
+        )}
+        {showLogo && (
+          <Logo width={32} height={32} />
         )}
       </Box>
 

@@ -1,11 +1,11 @@
 import { useRouter } from "expo-router";
 import { RefreshCcw } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import IconButton from "@/components/buttons/IconButton";
+import { CharacterCounter } from "@/components/CharacterCounter";
 import Input from "@/components/input/Input";
 import Select, { type SelectItem } from "@/components/input/Select";
 import TextView from "@/components/text/Text";
@@ -243,12 +243,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             error={textTopError}
             paddingBottom={"1"}
           />
-          <TextView
-            color={textTop.length > 99 ? "informational-error" : "interactive-text-1"}
-            style={styles.counterLength}
-          >
-            {`${textTop?.length || 0}/99`}
-          </TextView>
+          <CharacterCounter current={textTop.length} max={99} />
         </Box>
         <Box
           width={"100%"}
@@ -280,12 +275,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             value={textBottom}
             error={textBottomError}
           />
-          <TextView
-            color={textBottom.length > 99 ? "informational-error" : "interactive-text-1"}
-            style={styles.counterLength}
-          >
-            {`${textBottom?.length || 0}/99`}
-          </TextView>
+          <CharacterCounter current={textBottom.length} max={99} />
         </Box>
       </Box>
       <Button
@@ -297,12 +287,4 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
       />
     </Box>
   );
-}
-
-const styles = StyleSheet.create({
-  counterLength: {
-    alignSelf: "flex-end",
-    paddingRight: 16,
-    paddingTop: 4,
-  },
-});
+};

@@ -1,21 +1,18 @@
-import { useTheme } from "@shopify/restyle";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { CheckIcon, FilterIcon, PencilIcon, X } from "lucide-react-native";
+import { FilterIcon, PencilIcon, X } from "lucide-react-native";
 import { useMemo, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import Box from "@/components/Box";
 import IconButton from "@/components/buttons/IconButton";
 import { CardList } from "@/components/CardList";
+import { FilterTagsDrawer } from "@/components/FilterTagsDrawer";
 import Header from "@/components/Header";
 import Input from "@/components/input/Input";
-import Drawer from "@/components/modals/Drawer";
 import NotFoundView from "@/components/NotFoundView";
-import Pressable from "@/components/Pressable";
-import TextView from "@/components/text/Text";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSetsStore } from "@/stores/useSetsStore";
-import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
+import type { ThemeColor } from "@/utils/theme/restyleTheme";
 
 export default function SetCardPage() {
   const router = useRouter();
@@ -25,7 +22,6 @@ export default function SetCardPage() {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const debouncedSearch = useDebounce(search, 300);
-  const theme = useTheme<Theme>();
 
   const currentSet = sets.find((set) => set.id === id);
   const allSetCards = allCards.filter((card) => card.setId === id);
@@ -164,79 +160,17 @@ export default function SetCardPage() {
         cards={cards}
         setId={id}
         color={currentSet.label as ThemeColor}
-        search={search}
+        search={search !== "" && selectedTags.length > 0}
       />
-      <Drawer
+      <FilterTagsDrawer
         visible={isFilterVisible}
         onClose={() => setIsFilterVisible(false)}
-        primaryActionLabel={"Apply"}
-        secondaryActionLabel={selectedTags.length > 0 ? "Clear" : undefined}
-        onPrimaryActionPress={handleFilterApply}
-        onSecondaryActionPress={handleClearFilters}
-        scrollable={true}
-        showCloseButton={false}
-      >
-        <Box
-          paddingTop="4"
-          paddingBottom="6"
-        >
-          <TextView
-            variant="variant-3-bold"
-            color="interactive-text-1"
-            marginBottom="4"
-            paddingLeft={"4"}
-          >
-            Filter by Tags
-          </TextView>
-          {currentSet?.tags && currentSet.tags.length > 0 ? (
-            <ScrollView style={[styles.tagList, { maxHeight: Dimensions.get("window").height * 0.5 }]}>
-              {currentSet.tags.map((tag) => {
-                const isSelected = selectedTags.includes(tag.id);
-                return (
-                  <Pressable
-                    key={tag.id}
-                    onPress={() => handleTagToggle(tag.id)}
-                  >
-                    <Box
-                      flexDirection="row"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      paddingVertical="3"
-                      paddingHorizontal="3"
-                      backgroundColor={"transparent"}
-                      borderBottomColor={"drawer-border"}
-                      borderBottomWidth={1}
-                      marginBottom="2"
-                    >
-                      <TextView
-                        variant="variant-2"
-                        color={isSelected ? "interactive-primary-text-idle" : "interactive-primary-text-pressed"}
-                      >
-                        {tag.name}
-                      </TextView>
-                      {isSelected && (
-                        <CheckIcon
-                          size={20}
-                          color={theme.colors["primary-color"]}
-                        />
-                      )}
-                    </Box>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-          ) : (
-            <TextView
-              variant="variant-2"
-              color="interactive-primary-text-pressed"
-              textAlign="center"
-              marginTop="4"
-            >
-              No tags available in this set
-            </TextView>
-          )}
-        </Box>
-      </Drawer>
+        currentSet={currentSet}
+        selectedTags={selectedTags}
+        onTagToggle={handleTagToggle}
+        onApply={handleFilterApply}
+        onClear={handleClearFilters}
+      />
     </Box>
   );
 }
@@ -244,8 +178,5 @@ export default function SetCardPage() {
 const styles = StyleSheet.create({
   filterIcon: {
     marginTop: 4,
-  },
-  tagList: {
-    flexGrow: 0,
   },
 });

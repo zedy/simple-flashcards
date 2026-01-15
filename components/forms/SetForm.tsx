@@ -8,6 +8,7 @@ import { ScrollView, StyleSheet, type TextInput } from "react-native";
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import PillButton from "@/components/buttons/PillButton";
+import { CharacterCounter } from "@/components/CharacterCounter";
 import Input from "@/components/input/Input";
 import { EmojiPickerDrawer } from "@/components/modals/content/EmojiPickerDrawer";
 import TextView from "@/components/text/Text";
@@ -237,12 +238,7 @@ export default function SetForm({ data }: SetFormProps) {
                 error={tagError}
                 width={"auto"}
               />
-              <TextView
-                color={tag && tag?.length > 20 ? "informational-error" : "interactive-text-1"}
-                style={styles.counterLength}
-              >
-                {`${tag?.length || 0}/20`}
-              </TextView>
+              <CharacterCounter current={tag?.length || 0} max={20} />
             </Box>
             <IconButton
               icon={
@@ -346,11 +342,6 @@ const styles = StyleSheet.create({
     padding: 0,
     backgroundColor: "transparent",
     height: "100%",
-  },
-  counterLength: {
-    alignSelf: "flex-end",
-    paddingRight: 20,
-    paddingTop: 2,
   },
   infoIcon: {
     marginTop: 5,
