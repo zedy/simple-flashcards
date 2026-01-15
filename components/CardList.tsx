@@ -81,7 +81,7 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
             showsVerticalScrollIndicator={false}
           >
             <Box
-              gap={"4"}
+              gap={"2"}
               paddingBottom={"4"}
             >
               {cards.map((card) => (

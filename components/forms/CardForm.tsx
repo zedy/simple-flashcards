@@ -104,16 +104,16 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
     if (!textTop || textTop.trim().length === 0) {
       setTextTopError("Text must have at least 1 character");
       hasError = true;
-    } else if (textTop.length > 75) {
-      setTextTopError("Text must be at most 75 characters");
+    } else if (textTop.length > 99) {
+      setTextTopError("Text must be at most 99 characters");
       hasError = true;
     }
 
     if (!textBottom || textBottom.trim().length === 0) {
       setTextBottomError("Text must have at least 1 character");
       hasError = true;
-    } else if (textBottom.length > 75) {
-      setTextBottomError("Text must be at most 75 characters");
+    } else if (textBottom.length > 99) {
+      setTextBottomError("Text must be at most 99 characters");
       hasError = true;
     }
 
@@ -231,7 +231,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             variant="filled"
             type="textArea"
             label=""
-            textVariant="variant-4-medium"
+            textVariant="variant-3-medium"
             borderRadius="m"
             placeholder="Front card text"
             onChangeText={(text) => {
@@ -242,10 +242,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             error={textTopError}
           />
           <TextView
-            color={textTop.length > 75 ? "informational-error" : "interactive-text-dark-1"}
+            color={textTop.length > 99 ? "informational-error" : "interactive-text-dark-1"}
             style={styles.counterLength}
           >
-            {`${textTop?.length || 0}/75`}
+            {`${textTop?.length || 0}/99`}
           </TextView>
         </Box>
         <Box
@@ -266,7 +266,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             variant="filled"
             type="textArea"
             label=""
-            textVariant="variant-4-medium"
+            textVariant="variant-3-medium"
             borderRadius="m"
             placeholder="Back card text"
             onChangeText={(text) => {
@@ -277,10 +277,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             error={textBottomError}
           />
           <TextView
-            color={textBottom.length > 75 ? "informational-error" : "interactive-text-dark-1"}
+            color={textBottom.length > 99 ? "informational-error" : "interactive-text-dark-1"}
             style={styles.counterLength}
           >
-            {`${textBottom?.length || 0}/75`}
+            {`${textBottom?.length || 0}/99`}
           </TextView>
         </Box>
       </Box>

@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, RotateCcw, Shuffle } from "lucide-react-native";
 import React from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import type { Card } from "@/stores/useSetsStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 import type { ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "./Box";
@@ -53,21 +54,26 @@ export const DoubleCards = ({
   returnTo = "setcard",
   progressColor = "interactive-primary-bg-idle",
 }: DoubleCardsProps) => {
+  const { settings } = useSettingsStore();
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(0);
 
   // Flip animation
   const animatedCardStyle = useAnimatedStyle(() => {
     const rotateY = interpolate(rotation.value, [0, 1], [0, 180]);
+    const opacity = interpolate(rotation.value, [0, 0.5, 0.5, 1], [1, 1, 0, 0]);
     return {
       transform: [{ rotateY: `${rotateY}deg` }],
+      opacity,
     };
   });
 
   const animatedBackStyle = useAnimatedStyle(() => {
     const rotateY = interpolate(rotation.value, [0, 1], [180, 360]);
+    const opacity = interpolate(rotation.value, [0, 0.5, 0.5, 1], [0, 0, 1, 1]);
     return {
       transform: [{ rotateY: `${rotateY}deg` }],
+      opacity,
     };
   });
 
@@ -108,30 +114,32 @@ export const DoubleCards = ({
       padding="5"
       justifyContent="space-between"
     >
-      <Box
-        width="100%"
-        gap="2"
-      >
+      {settings.showProgressBar && (
         <Box
-          height={8}
-          backgroundColor="elevation-background-dark-1"
-          borderRadius="m"
-          overflow="hidden"
+          width="100%"
+          gap="2"
         >
           <Box
-            height="100%"
-            backgroundColor={progressColor}
-            width={`${progress}%`}
-          />
+            height={8}
+            backgroundColor="elevation-background-dark-1"
+            borderRadius="m"
+            overflow="hidden"
+          >
+            <Box
+              height="100%"
+              backgroundColor={progressColor}
+              width={`${progress}%`}
+            />
+          </Box>
+          <TextView
+            variant="variant-2"
+            color="interactive-text-dark-1"
+            textAlign="center"
+          >
+            {currentIndex + 1} / {totalCards}
+          </TextView>
         </Box>
-        <TextView
-          variant="variant-2"
-          color="interactive-text-dark-1"
-          textAlign="center"
-        >
-          {currentIndex + 1} / {totalCards}
-        </TextView>
-      </Box>
+      )}
 
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.cardContainer, swipeStyle]}>
@@ -141,38 +149,52 @@ export const DoubleCards = ({
           >
             <Animated.View style={[styles.card, styles.cardFront, animatedCardStyle]}>
               <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="front" />
-              <TextView
-                variant="variant-4"
-                color="interactive-text-dark-1"
-                textAlign="center"
+              <ScrollView
+                style={styles.cardScrollView}
+                contentContainerStyle={styles.cardScrollContent}
+                showsVerticalScrollIndicator={true}
               >
-                {card.topText}
-              </TextView>
-              <TextView
-                variant="variant-1"
-                color="interactive-primary-text-pressed"
-                textAlign="center"
-                marginTop="4"
-              >
-                Tap to flip
-              </TextView>
+                <TextView
+                  variant="variant-4"
+                  color="interactive-text-dark-1"
+                  textAlign="center"
+                  width={"100%"}
+                >
+                  {card.topText}
+                </TextView>
+                <TextView
+                  variant="variant-1"
+                  color="interactive-primary-text-pressed"
+                  textAlign="center"
+                  marginTop="4"
+                >
+                  Tap to flip
+                </TextView>
+              </ScrollView>
             </Animated.View>
 
             <Animated.View style={[styles.card, styles.cardBack, animatedBackStyle]}>
               <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="back" />
-              <TextView
-                variant="variant-4"
-                color="interactive-text-dark-1"
-                textAlign="center"
+              <ScrollView
+                style={styles.cardScrollView}
+                contentContainerStyle={styles.cardScrollContent}
+                showsVerticalScrollIndicator={true}
               >
-                {card.bottomText}
-              </TextView>
+                <TextView
+                  variant="variant-4"
+                  color="interactive-text-dark-1"
+                  textAlign="center"
+                  width={"100%"}
+                >
+                  {card.bottomText}
+                </TextView>
+              </ScrollView>
             </Animated.View>
           </Pressable>
             <Box flexDirection={"row"} alignSelf={"flex-start"} paddingTop={"2"} height={24}>
               <TextView
                 variant="variant-2-medium"
-                color="interactive-text-dark-1"
+                color="interactive-primary-text-pressed"
                 textAlign="center"
               >
                 {card.tagLabel}
@@ -248,7 +270,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "#373737",
+    backgroundColor: "#303030",
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
@@ -260,6 +282,16 @@ const styles = StyleSheet.create({
   },
   cardBack: {
     zIndex: 0,
+  },
+  cardScrollView: {
+    width: "100%",
+    maxHeight: "100%",
+  },
+  cardScrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
   },
   editIcon: {
     position: "absolute",

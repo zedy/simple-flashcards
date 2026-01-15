@@ -180,7 +180,8 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
             fontSize: theme.textVariants[textVariant].fontSize,
             fontFamily: theme.textVariants[textVariant].fontFamily,
             paddingVertical: 0,
-            outline: "none"
+            outline: "none",
+            height: type === "textArea"? "100%" : "auto"
           }}
           multiline={type === "textArea"}
           textAlignVertical={type === "textArea" ? "top" : "center"}

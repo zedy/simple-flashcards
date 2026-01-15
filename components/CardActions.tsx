@@ -43,7 +43,9 @@ export const CardActions = ({ card, onCardDeleted, returnTo = "setcard", text }:
         width={"100%"}
         flexDirection={"row"}
         justifyContent={"space-between"}
+        backgroundColor={"elevation-background-dark-1"}
         style={styles.icon}
+        zIndex={1}
       >
         <IconButton
           onPress={handleEditCard}

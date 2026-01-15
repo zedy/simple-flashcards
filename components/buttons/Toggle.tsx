@@ -34,7 +34,7 @@ const Toggle = ({ onChange, checked, disabled, id }: ToggleProps) => {
     }
     if (checked) {
       translate.value = withTiming(TRANSLATE_Y_CHECKED);
-      setBackgroundColor(disabled ? "interactive-icon-disabled" : "interactive-icon-idle-2");
+      setBackgroundColor(disabled ? "interactive-icon-disabled" : "interactive-primary-bg-idle");
     } else {
       translate.value = withTiming(TRANSLATE_Y_UNCHECKED);
       setBackgroundColor(disabled ? "interactive-icon-disabled" : "interactive-icon-idle");
@@ -60,7 +60,7 @@ const Toggle = ({ onChange, checked, disabled, id }: ToggleProps) => {
           width={19}
           height={19}
           borderRadius="m"
-          backgroundColor="interactive-primary-on"
+          backgroundColor="elevation-background-dark-2"
           style={[
             {
               transform: [

@@ -75,7 +75,7 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
             contentContainerStyle={styles.scrollViewContent}
             showsVerticalScrollIndicator={false}
           >
-            <Box gap={"4"} paddingBottom={"4"}>
+            <Box gap={"2"} paddingBottom={"4"}>
               {sets.map((set) => (
                 <SwipeableSetCard
                   key={set.id}
