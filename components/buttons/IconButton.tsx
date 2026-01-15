@@ -5,6 +5,12 @@ import { ActivityIndicator, type PressableProps } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import type { SvgProps } from "react-native-svg";
 
+import {
+  ICON_BUTTON_PRESS_DURATION,
+  ICON_BUTTON_RELEASE_DURATION,
+  ICON_BUTTON_SPRING_DAMPING,
+  ICON_BUTTON_SPRING_STIFFNESS,
+} from "@/constants/shared";
 import type { IconButtonSize, IconButtonVariant } from "@/types";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
@@ -113,18 +119,18 @@ const IconButton = ({
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
     // Animate to pressed state
-    scale.value = withTiming(0.95, { duration: 100 });
-    opacity.value = withTiming(0.7, { duration: 100 });
+    scale.value = withTiming(0.95, { duration: ICON_BUTTON_PRESS_DURATION });
+    opacity.value = withTiming(0.7, { duration: ICON_BUTTON_PRESS_DURATION });
   };
 
   const handlePressOut = () => {
     setPressed(false);
     // Animate back to normal state with spring
     scale.value = withSpring(1, {
-      damping: 15,
-      stiffness: 150,
+      damping: ICON_BUTTON_SPRING_DAMPING,
+      stiffness: ICON_BUTTON_SPRING_STIFFNESS,
     });
-    opacity.value = withTiming(1, { duration: 200 });
+    opacity.value = withTiming(1, { duration: ICON_BUTTON_RELEASE_DURATION });
   };
 
   return (

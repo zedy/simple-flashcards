@@ -1,6 +1,5 @@
 import { useTheme } from "@shopify/restyle";
 import { MoonIcon, SunIcon } from "lucide-react-native";
-import { useEffect } from "react";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -13,6 +12,17 @@ import IconButton from "@/components/buttons/IconButton";
 import Toggle from "@/components/buttons/Toggle";
 import Header from "@/components/Header";
 import TextView from "@/components/text/Text";
+import {
+  THEME_TOGGLE_BACKGROUND_FADE_DURATION,
+  THEME_TOGGLE_DELAY,
+  THEME_TOGGLE_FADE_IN_DURATION,
+  THEME_TOGGLE_FADE_OUT_DURATION,
+  THEME_TOGGLE_ROTATION_IN_DURATION,
+  THEME_TOGGLE_ROTATION_OUT_DURATION,
+  THEME_TOGGLE_SCALE_OUT_DURATION,
+  THEME_TOGGLE_SPRING_DAMPING,
+  THEME_TOGGLE_SPRING_STIFFNESS,
+} from "@/constants/shared";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { ThemeEnum } from "@/types";
 import type { Theme } from "@/utils/theme/restyleTheme";
@@ -21,16 +31,12 @@ const AnimatedBox = Animated.createAnimatedComponent(Box);
 
 export default function SettingsScreen() {
   const theme = useTheme<Theme>();
-  const { settings, updateSetting, hydrate } = useSettingsStore();
+  const { settings, updateSetting } = useSettingsStore();
 
   const rotation = useSharedValue(0);
   const opacity = useSharedValue(1);
   const scale = useSharedValue(1);
   const backgroundOpacity = useSharedValue(1);
-
-  useEffect(() => {
-    hydrate();
-  }, []);
 
   const handleToggleProgressBar = () => {
     updateSetting("showProgressBar", !settings.showProgressBar);
@@ -40,12 +46,12 @@ export default function SettingsScreen() {
     const isDark = settings.theme === ThemeEnum.dark;
 
     // Animate out (sun sets / moon sets)
-    rotation.value = withTiming(isDark ? -90 : 90, { duration: 200 });
-    opacity.value = withTiming(0, { duration: 250 });
-    scale.value = withTiming(0.5, { duration: 250 });
+    rotation.value = withTiming(isDark ? -90 : 90, { duration: THEME_TOGGLE_ROTATION_OUT_DURATION });
+    opacity.value = withTiming(0, { duration: THEME_TOGGLE_FADE_OUT_DURATION });
+    scale.value = withTiming(0.5, { duration: THEME_TOGGLE_SCALE_OUT_DURATION });
 
     // Background fade
-    backgroundOpacity.value = withTiming(0.7, { duration: 200 });
+    backgroundOpacity.value = withTiming(0.7, { duration: THEME_TOGGLE_BACKGROUND_FADE_DURATION });
 
     // Change theme after animation out completes
     setTimeout(() => {
@@ -53,14 +59,14 @@ export default function SettingsScreen() {
 
       // Animate in (moon rises / sun rises)
       rotation.value = isDark ? 90 : -90;
-      rotation.value = withTiming(0, { duration: 150 });
-      opacity.value = withTiming(1, { duration: 150 });
+      rotation.value = withTiming(0, { duration: THEME_TOGGLE_ROTATION_IN_DURATION });
+      opacity.value = withTiming(1, { duration: THEME_TOGGLE_FADE_IN_DURATION });
       scale.value = withSpring(1, {
-        damping: 25,
-        stiffness: 300,
+        damping: THEME_TOGGLE_SPRING_DAMPING,
+        stiffness: THEME_TOGGLE_SPRING_STIFFNESS,
       });
-      backgroundOpacity.value = withTiming(1, { duration: 200 });
-    }, 250);
+      backgroundOpacity.value = withTiming(1, { duration: THEME_TOGGLE_BACKGROUND_FADE_DURATION });
+    }, THEME_TOGGLE_DELAY);
   };
 
   const isDark = settings.theme === ThemeEnum.dark;

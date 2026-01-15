@@ -40,7 +40,7 @@ export default function EditCardScreen() {
       backgroundColor="elevation-background-3"
     >
       <Header
-        title="EDIT CARD"
+        title="Edit Card"
         showBackButton
         onBackPress={handleBackPress}
       />

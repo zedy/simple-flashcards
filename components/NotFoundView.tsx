@@ -8,7 +8,7 @@ interface NotFoundViewProps {
 }
 
 export default function NotFoundView({
-  title = "NOT FOUND",
+  title = "Not Found",
   message = "The item you're looking for doesn't exist.",
 }: NotFoundViewProps) {
   return (

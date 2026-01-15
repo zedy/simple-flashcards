@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
+import { SWIPEABLE_CARD_DURATION, SWIPEABLE_CARD_NAVIGATION_DELAY } from "@/constants/shared";
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
 
 import Box from "./Box";
@@ -31,14 +32,14 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
   useEffect(() => {
     if (!isOpen) {
       translateX.value = withTiming(0, {
-        duration: 200,
+        duration: SWIPEABLE_CARD_DURATION,
       });
     }
   }, [isOpen]);
 
   const resetSwipe = () => {
     translateX.value = withTiming(0, {
-      duration: 200,
+      duration: SWIPEABLE_CARD_DURATION,
     });
     onSwipeChange(null);
   };
@@ -53,7 +54,7 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
     // Delay navigation slightly to allow animation to start
     setTimeout(() => {
       router.push(`/(tabs)/edit-set?id=${data.id}`);
-    }, 100);
+    }, SWIPEABLE_CARD_NAVIGATION_DELAY);
   };
 
   const handlePlay = () => {
@@ -62,7 +63,7 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
       // Delay navigation slightly to allow animation to start
       setTimeout(() => {
         router.push(`/(tabs)/play?setId=${data.id}`);
-      }, 100);
+      }, SWIPEABLE_CARD_NAVIGATION_DELAY);
     }
   };
 
@@ -85,13 +86,13 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
       if (translateX.value < SWIPE_THRESHOLD / 2) {
         // Swipe far enough, show actions
         translateX.value = withTiming(SWIPE_THRESHOLD, {
-          duration: 200,
+          duration: SWIPEABLE_CARD_DURATION,
         });
         onSwipeChange(data.id);
       } else {
         // Not far enough, reset
         translateX.value = withTiming(0, {
-          duration: 200,
+          duration: SWIPEABLE_CARD_DURATION,
         });
         onSwipeChange(null);
       }

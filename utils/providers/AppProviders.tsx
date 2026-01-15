@@ -3,7 +3,6 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native
 import { ThemeProvider as RestyleThemeProvider } from "@shopify/restyle";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import type { FC, PropsWithChildren } from "react";
-import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -31,11 +30,7 @@ export const combineProviders = <ComponentType extends FC>(...components: PropsW
 
 // Wrapper components for providers that need props
 const RestyleProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { settings, hydrate } = useSettingsStore();
-
-  useEffect(() => {
-    hydrate();
-  }, [hydrate]);
+  const { settings } = useSettingsStore();
 
   const activeTheme = settings.theme === ThemeEnum.dark ? darkTheme : lightTheme;
 

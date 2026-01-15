@@ -9,7 +9,7 @@ export default function CreateSetScreen() {
       backgroundColor="elevation-background-3"
     >
       <Header
-        title="CREATE NEW SET"
+        title="Create New Set"
         showBackButton
       />
       <SetForm />

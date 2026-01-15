@@ -2,12 +2,16 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import Toast from "react-native-toast-message";
 
+import SplashScreenComponent from "@/components/SplashScreen";
 import ToastContent from "@/components/ui/ToastContent";
+import { SPLASH_SCREEN_MIN_DURATION } from "@/constants/shared";
+import { useSetsStore } from "@/stores/useSetsStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 import AppContextProviders from "@/utils/providers/AppProviders";
 
 SplashScreen.preventAutoHideAsync();
@@ -40,14 +44,38 @@ export default function RootLayout() {
     "BalooBhai2-ExtraBold": require("@/assets/fonts/BalooBhai2-ExtraBold.ttf"),
   });
 
+  const { hydrate: hydrateSets, isHydrated: setsHydrated } = useSetsStore();
+  const { hydrate: hydrateSettings, isHydrated: settingsHydrated } = useSettingsStore();
+  const [isReady, setIsReady] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+
   useEffect(() => {
-    if (fontsLoaded) {
+    const initializeApp = async () => {
+      await Promise.all([hydrateSets(), hydrateSettings()]);
+    };
+    initializeApp();
+
+    // Minimum splash screen display
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, SPLASH_SCREEN_MIN_DURATION);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded && setsHydrated && settingsHydrated && minTimeElapsed) {
+      setIsReady(true);
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, setsHydrated, settingsHydrated, minTimeElapsed]);
 
-  if (!fontsLoaded) {
-    return null;
+  if (!isReady) {
+    return (
+      <AppContextProviders>
+        <SplashScreenComponent />
+      </AppContextProviders>
+    );
   }
 
   return (

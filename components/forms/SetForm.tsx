@@ -12,6 +12,7 @@ import { CharacterCounter } from "@/components/CharacterCounter";
 import Input from "@/components/input/Input";
 import { EmojiPickerDrawer } from "@/components/modals/content/EmojiPickerDrawer";
 import TextView from "@/components/text/Text";
+import { FORM_FOCUS_DELAY } from "@/constants/shared";
 import { SetCreationSchema, type SetCreationSchemaDTO } from "@/data/models/Set.models";
 import { useForm } from "@/hooks/useForm";
 import { type FlashcardSet, type Tag as TagType, useSetsStore } from "@/stores/useSetsStore";
@@ -90,6 +91,7 @@ export default function SetForm({ data }: SetFormProps) {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SetCreationSchemaDTO>({
     zodSchema: SetCreationSchema,
@@ -109,6 +111,7 @@ export default function SetForm({ data }: SetFormProps) {
   };
 
   const onSubmit = (data: SetCreationSchemaDTO) => {
+    setValue("name", "");
     createNewSet(data);
   };
 
@@ -119,13 +122,13 @@ export default function SetForm({ data }: SetFormProps) {
     // Validation
     if (!tag || tag.trim().length === 0) {
       setTagError("Tag must have at least 1 character");
-      setTimeout(() => tagRef.current?.focus(), 100);
+      setTimeout(() => tagRef.current?.focus(), FORM_FOCUS_DELAY);
       return;
     }
 
     if (tag.length > 20) {
       setTagError("Tag must be at most 20 characters");
-      setTimeout(() => tagRef.current?.focus(), 100);
+      setTimeout(() => tagRef.current?.focus(), FORM_FOCUS_DELAY);
       return;
     }
 
@@ -138,7 +141,7 @@ export default function SetForm({ data }: SetFormProps) {
       },
     ]);
     setTag("");
-    setTimeout(() => tagRef.current?.focus(), 100);
+    setTimeout(() => tagRef.current?.focus(), FORM_FOCUS_DELAY);
   };
 
   const handleRemoveTag = (id: string) => {
@@ -197,15 +200,18 @@ export default function SetForm({ data }: SetFormProps) {
           control={control}
           name="name"
           render={({ field: { onChange, value } }) => (
-            <Input
-              label=""
-              leftElement={<Clipboard color={theme.colors["interactive-text-1"]} />}
-              placeholder="Enter set name *"
-              value={value}
-              variant="outlined"
-              onChangeText={onChange}
-              error={errors.name?.message}
-            />
+            <>
+              <Input
+                label=""
+                leftElement={<Clipboard color={theme.colors["interactive-text-1"]} />}
+                placeholder="Enter set name *"
+                value={value}
+                variant="outlined"
+                onChangeText={onChange}
+                error={errors.name?.message}
+              />
+              <CharacterCounter current={value?.length || 0} max={16} />
+            </>
           )}
         />
         <Box

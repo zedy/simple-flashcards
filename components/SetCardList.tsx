@@ -8,6 +8,12 @@ import Button from "@/components/buttons/Button";
 import { ScrollableListWithButton } from "@/components/ScrollableListWithButton";
 import { SwipeableSetCard } from "@/components/SwipeableSetCard";
 import TextView from "@/components/text/Text";
+import {
+  LIST_ITEM_FADE_OUT_DURATION,
+  LIST_ITEM_LAYOUT_DELAY,
+  LIST_ITEM_SPRING_DAMPING,
+  LIST_ITEM_SPRING_STIFFNESS,
+} from "@/constants/shared";
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
 
 interface SetCardListProps {
@@ -79,8 +85,11 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
           {sets.map((set) => (
             <Animated.View
               key={set.id}
-              exiting={FadeOut.duration(150)}
-              layout={Layout.springify().damping(15).stiffness(150).delay(130)}
+              exiting={FadeOut.duration(LIST_ITEM_FADE_OUT_DURATION)}
+              layout={Layout.springify()
+                .damping(LIST_ITEM_SPRING_DAMPING)
+                .stiffness(LIST_ITEM_SPRING_STIFFNESS)
+                .delay(LIST_ITEM_LAYOUT_DELAY)}
             >
               <SwipeableSetCard
                 data={set}

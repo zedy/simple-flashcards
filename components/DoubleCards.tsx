@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { CARD_FLIP_DURATION, CARD_SWIPE_RESET_DURATION } from "@/constants/shared";
 import type { Card } from "@/stores/useSetsStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import type { ThemeColor } from "@/utils/theme/restyleTheme";
@@ -80,7 +81,7 @@ export const DoubleCards = ({
   // Trigger animation when isFlipped changes
   React.useEffect(() => {
     rotation.value = withTiming(isFlipped ? 1 : 0, {
-      duration: 300,
+      duration: CARD_FLIP_DURATION,
     });
   }, [isFlipped]);
 
@@ -92,11 +93,11 @@ export const DoubleCards = ({
     .onEnd((event) => {
       if (event.translationX < -100 && !isLastCard) {
         // Swipe left - next card
-        translateX.value = withTiming(0, { duration: 200 });
+        translateX.value = withTiming(0, { duration: CARD_SWIPE_RESET_DURATION });
         onNext();
       } else if (event.translationX > 100 && !isFirstCard) {
         // Swipe right - previous card
-        translateX.value = withTiming(0, { duration: 200 });
+        translateX.value = withTiming(0, { duration: CARD_SWIPE_RESET_DURATION });
         onPrevious();
       } else {
         // Reset
