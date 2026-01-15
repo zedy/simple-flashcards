@@ -152,7 +152,7 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
         borderColor={borderColor}
         borderWidth={1}
         borderRadius={borderRadius ?? (variant !== "outlined" ? "rounding-button-rounding" : "rounding-input-rounding")}
-        height={type === "textArea" ? 124 : 54}
+        height={type === "textArea" ? "100%" : 54}
         paddingHorizontal={variant === "outlined" ? "5" : "height-height-m"}
         paddingVertical={
           variant === "outlined"

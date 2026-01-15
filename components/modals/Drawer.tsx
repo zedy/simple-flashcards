@@ -183,7 +183,7 @@ const Drawer = ({
         borderTopLeftRadius: theme.borderRadii["4xl"],
         borderTopRightRadius: theme.borderRadii["4xl"],
         borderTopColor: theme.colors['interactive-border-1'],
-        borderTopWidth: 2,
+        // borderTopWidth: 2,
         height: 0,
       }}
       backgroundStyle={{

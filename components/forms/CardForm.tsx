@@ -226,7 +226,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         alignSelf={"stretch"}
         justifyContent={"center"}
       >
-        <Box>
+        <Box flexGrow={1}>
           <Input
             variant="filled"
             type="textArea"
@@ -238,8 +238,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
               setTextTop(text);
               setTextTopError(undefined);
             }}
+            flexGrow={1}
             value={textTop}
             error={textTopError}
+            paddingBottom={"1"}
           />
           <TextView
             color={textTop.length > 99 ? "informational-error" : "interactive-text-dark-1"}
@@ -261,14 +263,16 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             iconColor="interactive-text-dark-1"
           />
         </Box>
-        <Box>
+        <Box flexGrow={1}>
           <Input
             variant="filled"
             type="textArea"
             label=""
+            flexGrow={1}
             textVariant="variant-3-medium"
             borderRadius="m"
             placeholder="Back card text"
+            paddingBottom={"1"}
             onChangeText={(text) => {
               setTextBottom(text);
               setTextBottomError(undefined);
