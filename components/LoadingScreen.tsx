@@ -6,7 +6,7 @@ export default function LoadingScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
       justifyContent="center"
       alignItems="center"
     >

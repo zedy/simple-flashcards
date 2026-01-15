@@ -32,7 +32,8 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
   return (
     <Box
       flex={1}
-      padding="5"
+      paddingVertical="5"
+      paddingHorizontal={"0"}
       justifyContent={"center"}
       alignContent={"center"}
       gap={"4"}
@@ -55,7 +56,7 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
             <TextView
               textAlign={"center"}
               variant={"variant-2-bold"}
-              color="interactive-text-dark-1"
+              color="interactive-text-1"
             >
               Before you start create your first set
             </TextView>
@@ -75,7 +76,7 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
             contentContainerStyle={styles.scrollViewContent}
             showsVerticalScrollIndicator={false}
           >
-            <Box gap={"2"} paddingBottom={"4"}>
+            <Box gap={"4"} paddingBottom={"4"}>
               {sets.map((set) => (
                 <SwipeableSetCard
                   key={set.id}

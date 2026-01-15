@@ -10,7 +10,7 @@ export default function AddScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header title="Add Card" />
       <CardForm prefilledSetId={setId} />

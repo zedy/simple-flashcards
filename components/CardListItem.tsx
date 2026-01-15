@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { Trash2Icon } from "lucide-react-native";
 import { useState } from "react";
+import { StyleSheet } from 'react-native';
 
 import { type Card, useSetsStore } from "@/stores/useSetsStore";
 import type { ThemeColor } from "@/utils/theme/restyleTheme";
@@ -32,7 +33,7 @@ export const CardListItem = ({ data, color }: CardListItemProps) => {
   };
 
   return (
-    <Pressable onPress={handleCardPress}>
+    <Pressable onPress={handleCardPress} paddingHorizontal={"5"}>
       <Box
         width={"100%"}
         minHeight={96}
@@ -42,8 +43,9 @@ export const CardListItem = ({ data, color }: CardListItemProps) => {
         borderBottomColor={color}
         borderRadius={"m"}
         padding={"5"}
-        backgroundColor={"elevation-background-dark-1"}
+        backgroundColor={"elevation-background-1"}
         alignItems={"center"}
+        style={styles.card}
       >
         <Box gap={"1"}>
           <TextView
@@ -101,3 +103,10 @@ export const CardListItem = ({ data, color }: CardListItemProps) => {
     </Pressable>
   );
 };
+
+
+const styles = StyleSheet.create({
+  card: {
+    boxShadow: "rgba(0, 0, 0, 0.1) 0px 6px 6px 2px",
+  },
+});

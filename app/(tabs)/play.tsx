@@ -45,7 +45,7 @@ export default function PlayScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header title={activeSet.name.toUpperCase()} showBackButton />
       <DoubleCards

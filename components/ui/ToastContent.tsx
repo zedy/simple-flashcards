@@ -70,7 +70,7 @@ const ToastContent = ({
       >
         <Text
           variant="variant-1"
-          color="interactive-text-on-inverted"
+          color="interactive-text-1"
           textAlign="left"
         >
           {message}

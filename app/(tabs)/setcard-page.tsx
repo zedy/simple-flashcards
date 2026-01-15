@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CheckIcon, FilterIcon, PencilIcon, X } from "lucide-react-native";
 import { useMemo, useState } from "react";
@@ -14,7 +15,7 @@ import Pressable from "@/components/Pressable";
 import TextView from "@/components/text/Text";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSetsStore } from "@/stores/useSetsStore";
-import type { ThemeColor } from "@/utils/theme/restyleTheme";
+import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 export default function SetCardPage() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function SetCardPage() {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const debouncedSearch = useDebounce(search, 300);
+  const theme = useTheme<Theme>();
 
   const currentSet = sets.find((set) => set.id === id);
   const allSetCards = allCards.filter((card) => card.setId === id);
@@ -36,7 +38,8 @@ export default function SetCardPage() {
     if (debouncedSearch.trim()) {
       const searchLower = debouncedSearch.toLowerCase();
       filtered = filtered.filter(
-        (card) => card.topText.toLowerCase().includes(searchLower) || card.bottomText.toLowerCase().includes(searchLower),
+        (card) =>
+          card.topText.toLowerCase().includes(searchLower) || card.bottomText.toLowerCase().includes(searchLower),
       );
     }
 
@@ -91,10 +94,11 @@ export default function SetCardPage() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header
-        title={`${currentSet.name.toUpperCase()} (${allSetCards.length})`}
+        title={`${currentSet.name.toUpperCase()}`}
+        titleSuffix={`(${allSetCards.length})`}
         showBackButton
       >
         <IconButton
@@ -102,20 +106,21 @@ export default function SetCardPage() {
           size="s"
           variant="transparent"
           icon={<PencilIcon size={24} />}
-          iconColor="interactive-text-dark-1"
+          iconColor="interactive-text-1"
           iconSize={24}
         />
       </Header>
       <Box
         width={"100%"}
         padding={"4"}
+        paddingBottom={"0"}
         flexDirection={"row"}
         gap={"2"}
-        backgroundColor={"elevation-background-dark-3"}
+        backgroundColor={"elevation-background-3"}
       >
         <Input
           onChangeText={setSearch}
-          variant="filled"
+          variant="outlined"
           label=""
           placeholder="Search for a card"
           value={search}
@@ -123,17 +128,20 @@ export default function SetCardPage() {
           width={"auto"}
           rightElement={
             <IconButton
-              iconColor={"elevation-background-dark-1"}
+              iconColor={"interactive-text-1"}
               icon={<X size={24} />}
               onPress={handleClearSearch}
               variant="transparent"
             />
           }
         />
-        <Box position="relative" pointerEvents="box-none">
+        <Box
+          position="relative"
+          pointerEvents="box-none"
+        >
           <IconButton
             icon={<FilterIcon />}
-            iconColor={selectedTags.length > 0 ? "interactive-primary-text-idle" : "interactive-text-dark-1"}
+            iconColor={selectedTags.length > 0 ? "interactive-primary-text-idle" : "interactive-text-1"}
             onPress={handleOpenFilter}
             variant="transparent"
             style={styles.filterIcon}
@@ -166,17 +174,29 @@ export default function SetCardPage() {
         onPrimaryActionPress={handleFilterApply}
         onSecondaryActionPress={handleClearFilters}
         scrollable={true}
+        showCloseButton={false}
       >
-        <Box paddingHorizontal="4" paddingTop="4" paddingBottom="6">
-          <TextView variant="variant-3-bold" color="interactive-text-dark-1" marginBottom="4">
+        <Box
+          paddingTop="4"
+          paddingBottom="6"
+        >
+          <TextView
+            variant="variant-3-bold"
+            color="interactive-text-1"
+            marginBottom="4"
+            paddingLeft={"4"}
+          >
             Filter by Tags
           </TextView>
           {currentSet?.tags && currentSet.tags.length > 0 ? (
-            <ScrollView style={[styles.tagList, { maxHeight: Dimensions.get('window').height * 0.5 }]}>
+            <ScrollView style={[styles.tagList, { maxHeight: Dimensions.get("window").height * 0.5 }]}>
               {currentSet.tags.map((tag) => {
                 const isSelected = selectedTags.includes(tag.id);
                 return (
-                  <Pressable key={tag.id} onPress={() => handleTagToggle(tag.id)}>
+                  <Pressable
+                    key={tag.id}
+                    onPress={() => handleTagToggle(tag.id)}
+                  >
                     <Box
                       flexDirection="row"
                       alignItems="center"
@@ -184,7 +204,7 @@ export default function SetCardPage() {
                       paddingVertical="3"
                       paddingHorizontal="3"
                       backgroundColor={"transparent"}
-                      borderBottomColor={"elevation-outline-1"}
+                      borderBottomColor={"drawer-border"}
                       borderBottomWidth={1}
                       marginBottom="2"
                     >
@@ -194,14 +214,24 @@ export default function SetCardPage() {
                       >
                         {tag.name}
                       </TextView>
-                      {isSelected && <CheckIcon size={20} color="#25786E" />}
+                      {isSelected && (
+                        <CheckIcon
+                          size={20}
+                          color={theme.colors["primary-color"]}
+                        />
+                      )}
                     </Box>
                   </Pressable>
                 );
               })}
             </ScrollView>
           ) : (
-            <TextView variant="variant-2" color="interactive-primary-text-pressed" textAlign="center" marginTop="4">
+            <TextView
+              variant="variant-2"
+              color="interactive-primary-text-pressed"
+              textAlign="center"
+              marginTop="4"
+            >
               No tags available in this set
             </TextView>
           )}

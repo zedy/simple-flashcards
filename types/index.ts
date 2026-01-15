@@ -1,6 +1,5 @@
 export enum ButtonVariantEnum {
   primary = "primary",
-  secondary = "secondary",
   outlined = "outlined",
   text = "text",
 }
@@ -47,7 +46,6 @@ export type IconButtonSize = keyof typeof IconButtonSizeEnum;
 export type LoaderPosition = keyof typeof LoaderPositionEnum;
 
 export enum PillButtonVariantEnum {
-  toggle = "toggle",
   filled = "filled",
   outlined = "outlined",
 }
@@ -56,7 +54,6 @@ export type PillButtonVariant = keyof typeof PillButtonVariantEnum;
 
 export enum TextButtonVariantEnum {
   primary = "primary",
-  secondary = "secondary",
   dual = "dual",
   toast = "toast",
 }
@@ -140,17 +137,16 @@ export enum TopNavVariantEnum {
 
 export type TopNavVariant = keyof typeof TopNavVariantEnum;
 
-export enum FABVariantEnum {
-  primary = "primary",
-  secondary = "secondary",
-}
-
-export type FABVariant = keyof typeof FABVariantEnum;
-
 export enum ListItemVariantEnum {
   single = "single",
-  multiple = "multiple",
   action = "action",
 }
 
 export type ListItemVariant = keyof typeof ListItemVariantEnum;
+
+export enum ThemeEnum {
+  light = "light",
+  dark = "dark",
+}
+
+export type ThemeMode = keyof typeof ThemeEnum;

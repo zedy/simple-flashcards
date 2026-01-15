@@ -3,10 +3,13 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native
 import { ThemeProvider as RestyleThemeProvider } from "@shopify/restyle";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import type { FC, PropsWithChildren } from "react";
+import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import theme from "@/utils/theme/restyleTheme";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { ThemeEnum } from "@/types";
+import { darkTheme, lightTheme } from "@/utils/theme/restyleTheme";
 
 /* eslint-disable-next-line */
 type AnyChildren = PropsWithChildren<any>;
@@ -27,14 +30,22 @@ export const combineProviders = <ComponentType extends FC>(...components: PropsW
 };
 
 // Wrapper components for providers that need props
-const RestyleProvider: FC<PropsWithChildren> = ({ children }) => (
-  <RestyleThemeProvider theme={theme}>{children}</RestyleThemeProvider>
-);
+const RestyleProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { settings, hydrate } = useSettingsStore();
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
+  const activeTheme = settings.theme === ThemeEnum.dark ? darkTheme : lightTheme;
+
+  return <RestyleThemeProvider theme={activeTheme}>{children}</RestyleThemeProvider>;
+};
 
 const NavigationThemeProvider: FC<PropsWithChildren> = ({ children }) => {
-  const colorScheme = useColorScheme();
+  const { settings } = useSettingsStore();
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={settings.theme === ThemeEnum.dark ? DarkTheme : DefaultTheme}>
       {children}
     </ThemeProvider>
   );

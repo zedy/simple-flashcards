@@ -37,7 +37,7 @@ export default function EditCardScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header
         title="EDIT CARD"

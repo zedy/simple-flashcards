@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { useRouter } from "expo-router";
 import { Clipboard, CornerDownLeft, InfoIcon, Tag } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -13,7 +14,7 @@ import TextView from "@/components/text/Text";
 import { SetCreationSchema, type SetCreationSchemaDTO } from "@/data/models/Set.models";
 import { useForm } from "@/hooks/useForm";
 import { type FlashcardSet, type Tag as TagType, useSetsStore } from "@/stores/useSetsStore";
-import type { ThemeColor } from "@/utils/theme/restyleTheme";
+import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 import { showToast } from "@/utils/toast";
 
 import IconButton from "../buttons/IconButton";
@@ -47,6 +48,7 @@ export default function SetForm({ data }: SetFormProps) {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const { addSet, updateSet } = useSetsStore();
+  const theme = useTheme<Theme>();
   const isEditMode = !!data;
 
   const createNewSet = (formData: SetCreationSchemaDTO) => {
@@ -169,7 +171,7 @@ export default function SetForm({ data }: SetFormProps) {
             overflow={"hidden"}
             justifyContent={"center"}
             alignItems={"center"}
-            backgroundColor={"elevation-background-dark-1"}
+            backgroundColor={"elevation-background-1"}
             width={120}
             height={120}
             paddingTop={"3"}
@@ -184,7 +186,7 @@ export default function SetForm({ data }: SetFormProps) {
             </TextView>
           </Box>
           <TextView
-            variant={"variant-3"}
+            variant={"variant-3-medium"}
             color={"interactive-primary-text-idle"}
           >
             SET ICON
@@ -196,10 +198,10 @@ export default function SetForm({ data }: SetFormProps) {
           render={({ field: { onChange, value } }) => (
             <Input
               label=""
-              leftElement={<Clipboard />}
+              leftElement={<Clipboard color={theme.colors["interactive-text-1"]} />}
               placeholder="Enter set name *"
               value={value}
-              variant="filled"
+              variant="outlined"
               onChangeText={onChange}
               error={errors.name?.message}
             />
@@ -224,19 +226,19 @@ export default function SetForm({ data }: SetFormProps) {
                 placeholder="Enter new tag"
                 value={tag}
                 ref={tagRef}
-                variant="filled"
+                variant="outlined"
                 onChangeText={(text) => {
                   setTag(text);
                   setTagError(undefined);
                 }}
                 onSubmitEditing={handleAddTag}
-                leftElement={<Tag />}
-                rightElement={<CornerDownLeft />}
+                leftElement={<Tag color={theme.colors["interactive-text-1"]} />}
+                rightElement={<CornerDownLeft color={theme.colors["interactive-text-1"]} />}
                 error={tagError}
                 width={"auto"}
               />
               <TextView
-                color={tag && tag?.length > 20 ? "informational-error" : "interactive-text-dark-1"}
+                color={tag && tag?.length > 20 ? "informational-error" : "interactive-text-1"}
                 style={styles.counterLength}
               >
                 {`${tag?.length || 0}/20`}
@@ -246,7 +248,7 @@ export default function SetForm({ data }: SetFormProps) {
               icon={
                 <InfoIcon
                   size={24}
-                  color={"interactive-text-dark-1"}
+                  color={"interactive-text-1"}
                 />
               }
               onPress={() => setIsInfoModalOpen(true)}
@@ -276,9 +278,9 @@ export default function SetForm({ data }: SetFormProps) {
             gap={"4"}
           >
             <TextView
-              fontSize={18}
-              color={"interactive-text-dark-1"}
-              textAlign={"center"}
+              variant={"variant-3-medium"}
+              color={"interactive-primary-text-idle"}
+              alignSelf={"center"}
             >
               CARD COLOR
             </TextView>
@@ -296,7 +298,7 @@ export default function SetForm({ data }: SetFormProps) {
                   borderRadius={"m"}
                   key={color}
                   backgroundColor={color as ThemeColor}
-                  borderColor={label === color ? "interactive-text-dark-1" : (color as ThemeColor)}
+                  borderColor={label === color ? "interactive-text-1" : (color as ThemeColor)}
                   borderWidth={2}
                 >
                   <Button

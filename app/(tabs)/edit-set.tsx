@@ -24,7 +24,7 @@ export default function EditSetScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header
         title={`EDIT ${currentSet.name.toUpperCase()}`}

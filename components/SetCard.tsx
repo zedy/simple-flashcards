@@ -1,8 +1,10 @@
+import { useTheme } from "@shopify/restyle";
 import { useRouter } from "expo-router";
 import { GripVerticalIcon } from "lucide-react-native";
+import { StyleSheet } from 'react-native';
 
 import type { FlashcardSet } from "@/stores/useSetsStore";
-import type { ThemeColor } from "@/utils/theme/restyleTheme";
+import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "./Box";
 import Pressable from "./Pressable";
@@ -14,6 +16,7 @@ interface SetCardProps {
 }
 
 export const SetCard = ({ data, count }: SetCardProps) => {
+  const theme = useTheme<Theme>();
   const router = useRouter();
 
   const handleCardPress = () => {
@@ -21,7 +24,8 @@ export const SetCard = ({ data, count }: SetCardProps) => {
   };
 
   return (
-    <Pressable onPress={handleCardPress}>
+    <Pressable onPress={handleCardPress} 
+      paddingHorizontal={"5"}>
       <Box
         width={"100%"}
         height={96}
@@ -31,8 +35,9 @@ export const SetCard = ({ data, count }: SetCardProps) => {
         borderBottomColor={data.label ? (data.label as ThemeColor) : "interactive-primary-bg-idle"}
         borderRadius={"m"}
         padding={"5"}
-        backgroundColor={"elevation-background-dark-1"}
+        backgroundColor={"elevation-background-1"}
         alignItems={"center"}
+        style={styles.card}
       >
         <Box
           flexDirection={"row"}
@@ -57,10 +62,16 @@ export const SetCard = ({ data, count }: SetCardProps) => {
           </Box>
         </Box>
         <GripVerticalIcon
-          color={"#DBDBDB"}
+          color={theme.colors["interactive-text-1"]}
           size={24}
         />
       </Box>
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    boxShadow: "rgba(0, 0, 0, 0.1) 0px 6px 6px 2px",
+  },
+});

@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import type { ReactNode } from "react";
@@ -5,16 +6,19 @@ import { TouchableOpacity } from "react-native";
 
 import Box from "@/components/Box";
 import TextView from "@/components/text/Text";
+import type { Theme } from "@/utils/theme/restyleTheme";
 
 interface HeaderProps {
   title: string;
+  titleSuffix?: string;
   showBackButton?: boolean;
   children?: ReactNode;
   onBackPress?: () => void;
 }
 
-export default function Header({ title, showBackButton = false, children, onBackPress }: HeaderProps) {
+export default function Header({ title, titleSuffix, showBackButton = false, children, onBackPress }: HeaderProps) {
   const router = useRouter();
+  const theme = useTheme<Theme>();
 
   const handleBackPress = () => {
     if (onBackPress) {
@@ -26,7 +30,7 @@ export default function Header({ title, showBackButton = false, children, onBack
 
   return (
     <Box
-      backgroundColor="elevation-background-dark-4"
+      backgroundColor="elevation-background-4"
       paddingHorizontal="5"
       paddingVertical="4"
       flexDirection="row"
@@ -41,22 +45,29 @@ export default function Header({ title, showBackButton = false, children, onBack
           <TouchableOpacity onPress={handleBackPress}>
             <ChevronLeft
               size={24}
-              color="#DBDBDB"
+              color={theme.colors["interactive-text-1"]}
             />
           </TouchableOpacity>
         )}
       </Box>
 
       <Box
-        flex={1}
+        flexDirection={"row"}
         alignItems="center"
+        gap={"2"}
       >
         <TextView
           variant="variant-4-bold"
-          color="interactive-text-dark-1"
+          color="interactive-text-1"
         >
           {title}
         </TextView>
+        {titleSuffix && (<TextView
+          variant="variant-4-bold"
+          color="interactive-border-1"
+        >
+          {titleSuffix}
+        </TextView>)}
       </Box>
 
       <Box

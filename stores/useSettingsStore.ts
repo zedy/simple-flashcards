@@ -1,11 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 
+import { ThemeEnum, type ThemeMode } from '@/types';
+
 const SETTINGS_STORAGE_KEY = 'flashcard-settings-storage';
 
 interface Settings {
   showProgressBar: boolean;
-  theme: 'light' | 'dark';
+  theme: ThemeMode;
 }
 
 interface SettingsStore {
@@ -17,7 +19,7 @@ interface SettingsStore {
 
 const defaultSettings: Settings = {
   showProgressBar: true,
-  theme: 'dark',
+  theme: ThemeEnum.dark,
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({

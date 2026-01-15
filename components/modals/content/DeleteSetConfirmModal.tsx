@@ -21,7 +21,7 @@ export const DeleteSetConfirmModal = ({ callback, name }: DeleteSetConfirmModalP
     >
       <TextView
         variant={"variant-1-bold"}
-        color={"interactive-text-dark-1"}
+        color={"interactive-text-1"}
       >
         {`This will permanently delete ${name} and all of the cards. This action is not reversible.`}
       </TextView>

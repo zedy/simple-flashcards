@@ -1,9 +1,11 @@
+import { useTheme } from "@shopify/restyle";
 import { InfoIcon } from "lucide-react-native";
 import type { ReactElement } from "react";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import TextView from "@/components/text/Text";
+import type { Theme } from "@/utils/theme/restyleTheme";
 
 interface InfoModalProps {
   text: string;
@@ -16,11 +18,12 @@ interface InfoModalProps {
 }
 
 export const InfoModal = ({ action, text, icon, onClose }: InfoModalProps) => {
+  const theme = useTheme<Theme>();
 
   const handleActionCallback = () => {
     onClose?.();
     action?.callback();
-  }
+  };
 
   return (
     <Box
@@ -31,13 +34,13 @@ export const InfoModal = ({ action, text, icon, onClose }: InfoModalProps) => {
     >
       {icon || (
         <InfoIcon
-          color={"#DBDBDB"}
+          color={theme.colors["drawer-border"]}
           size={48}
         />
       )}
       <TextView
         variant={"variant-3-bold"}
-        color={"interactive-text-dark-1"}
+        color={"interactive-text-1"}
         textAlign={"center"}
       >
         {text}

@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { router } from "expo-router";
 import { IdCardIcon } from "lucide-react-native";
 import { ScrollView, StyleSheet } from "react-native";
@@ -6,7 +7,7 @@ import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import TextView from "@/components/text/Text";
 import type { Card } from "@/stores/useSetsStore";
-import type { ThemeColor } from "@/utils/theme/restyleTheme";
+import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 import { CardListItem } from "./CardListItem";
 
@@ -18,6 +19,8 @@ interface CardListProps {
 }
 
 export const CardList = ({ cards, setId, color, search }: CardListProps) => {
+  const theme = useTheme<Theme>();
+
   const handleAddNewCard = () => {
     if (setId) {
       router.push(`/(tabs)/add?setId=${setId}`);
@@ -29,10 +32,11 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
   return (
     <Box
       flex={1}
-      padding="5"
+      paddingVertical="5"
+      paddingHorizontal={"0"}
       justifyContent={"flex-start"}
       alignItems={"center"}
-      gap={"4"}
+      gap={"8"}
       width={"100%"}
     >
       {cards.length === 0 ? (
@@ -50,20 +54,20 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
             <IdCardIcon
               width={128}
               height={128}
-              color={"#DBDBDB"}
+              color={theme.colors["drawer-border"]}
             />
           </Box>
           <TextView
             textAlign={"center"}
             variant={"variant-2-bold"}
-            color="interactive-text-dark-1"
+            color="interactive-text-1"
           >
             {search ? "No cards match your search criteria" : "Set has no cards"}
           </TextView>
           {!search && (
             <Button
               label="ADD NEW CARD"
-              textVariant="variant-2"
+              textVariant="variant-2-bold"
               onPress={handleAddNewCard}
               width="l"
               style={styles.addNewSetBtn}
@@ -81,7 +85,7 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
             showsVerticalScrollIndicator={false}
           >
             <Box
-              gap={"2"}
+              gap={"4"}
               paddingBottom={"4"}
             >
               {cards.map((card) => (
@@ -99,7 +103,7 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
           >
             <Button
               label="ADD NEW CARD"
-              textVariant="variant-2"
+              textVariant="variant-2-bold"
               onPress={handleAddNewCard}
               width="l"
               style={styles.addNewSetBtn}

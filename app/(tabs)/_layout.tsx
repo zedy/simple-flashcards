@@ -1,19 +1,23 @@
+import { useTheme } from "@shopify/restyle";
 import { Tabs } from "expo-router";
 import { LayoutGrid, Plus, Settings } from "lucide-react-native";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
+import type { Theme } from "@/utils/theme/restyleTheme";
 
 export default function TabLayout() {
+  const theme = useTheme<Theme>();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#25786E",
+        tabBarActiveTintColor: theme.colors["primary-color"],
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: "#1F1F1F",
-          borderTopColor: "#858585",
+          backgroundColor: theme.colors["elevation-background-4"],
+          borderTopColor: theme.colors["interactive-border-1"],
           borderTopWidth: 1,
           paddingVertical: 10,
           height: 70,
@@ -32,7 +36,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{          
+        options={{
           title: "Sets",
           tabBarIcon: ({ color }) => (
             <LayoutGrid

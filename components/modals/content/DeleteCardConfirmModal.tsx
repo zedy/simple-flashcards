@@ -21,7 +21,7 @@ export const DeleteCardConfirmModal = ({ callback, name }: DeleteCardConfirmModa
     >
       <TextView
         variant={"variant-1-bold"}
-        color={"interactive-text-dark-1"}
+        color={"interactive-text-1"}
       >
         {`This will permanently delete the card. This action is not reversible.`}
       </TextView>

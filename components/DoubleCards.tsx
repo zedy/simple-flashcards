@@ -121,7 +121,7 @@ export const DoubleCards = ({
         >
           <Box
             height={8}
-            backgroundColor="elevation-background-dark-1"
+            backgroundColor="elevation-background-1"
             borderRadius="m"
             overflow="hidden"
           >
@@ -133,7 +133,7 @@ export const DoubleCards = ({
           </Box>
           <TextView
             variant="variant-2"
-            color="interactive-text-dark-1"
+            color="interactive-text-1"
             textAlign="center"
           >
             {currentIndex + 1} / {totalCards}
@@ -156,7 +156,7 @@ export const DoubleCards = ({
               >
                 <TextView
                   variant="variant-4"
-                  color="interactive-text-dark-1"
+                  color="interactive-text-1"
                   textAlign="center"
                   width={"100%"}
                 >
@@ -182,7 +182,7 @@ export const DoubleCards = ({
               >
                 <TextView
                   variant="variant-4"
-                  color="interactive-text-dark-1"
+                  color="interactive-text-1"
                   textAlign="center"
                   width={"100%"}
                 >
@@ -227,7 +227,7 @@ export const DoubleCards = ({
               variant="transparent"
               size="m"
               icon={<Shuffle size={24} />}
-              iconColor="interactive-text-dark-1"
+              iconColor="interactive-text-1"
               iconSize={24}
             />
             <IconButton
@@ -235,7 +235,7 @@ export const DoubleCards = ({
               variant="transparent"
               size="m"
               icon={<RotateCcw size={24} />}
-              iconColor="interactive-text-dark-1"
+              iconColor="interactive-text-1"
               iconSize={24}
             />
           </Box>

@@ -181,13 +181,13 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         paddingTop={"8"}
       >
         <TextView
-          color={"interactive-text-dark-1"}
+          color={"interactive-text-1"}
           textAlign={"center"}
         >
           Choose a set to add the card to *
         </TextView>
         <Select
-          variant="filled"
+          variant="outlined"
           label=""
           placeholder="Choose a set ..."
           onSelect={handleSetSelection}
@@ -203,14 +203,14 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         {tagList.length > 0 && (
           <>
             <TextView
-              color={"interactive-text-dark-1"}
+              color={"interactive-text-1"}
               textAlign={"center"}
               paddingTop={"4"}
             >
               Choose an optional tag to add the card
             </TextView>
             <Select
-              variant="filled"
+              variant="outlined"
               label=""
               placeholder="Add tag to card"
               onSelect={handleTagSelection}
@@ -228,7 +228,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
       >
         <Box flexGrow={1}>
           <Input
-            variant="filled"
+            variant="outlined"
             type="textArea"
             label=""
             textVariant="variant-3-medium"
@@ -244,7 +244,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             paddingBottom={"1"}
           />
           <TextView
-            color={textTop.length > 99 ? "informational-error" : "interactive-text-dark-1"}
+            color={textTop.length > 99 ? "informational-error" : "interactive-text-1"}
             style={styles.counterLength}
           >
             {`${textTop?.length || 0}/99`}
@@ -260,12 +260,12 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             variant="transparent"
             onPress={handleSwitchText}
             icon={<RefreshCcw size={64} />}
-            iconColor="interactive-text-dark-1"
+            iconColor="interactive-text-pressed"
           />
         </Box>
         <Box flexGrow={1}>
           <Input
-            variant="filled"
+            variant="outlined"
             type="textArea"
             label=""
             flexGrow={1}
@@ -281,7 +281,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             error={textBottomError}
           />
           <TextView
-            color={textBottom.length > 99 ? "informational-error" : "interactive-text-dark-1"}
+            color={textBottom.length > 99 ? "informational-error" : "interactive-text-1"}
             style={styles.counterLength}
           >
             {`${textBottom?.length || 0}/99`}
@@ -302,7 +302,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
 const styles = StyleSheet.create({
   counterLength: {
     alignSelf: "flex-end",
-    paddingRight: 10,
-    paddingTop: 2,
+    paddingRight: 16,
+    paddingTop: 4,
   },
 });

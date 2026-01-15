@@ -38,7 +38,7 @@ const ListItem = ({
       }
       const { backgroundColor, backgroundColorSelected, backgroundColorPressed } = theme.listItems[variant];
 
-      if (variant === "action") return "elevation-background";
+      if (variant === "action") return "elevation-background-1";
       if (selected) return backgroundColorSelected;
       if (pressed && onPress) return backgroundColorPressed;
 
@@ -115,7 +115,7 @@ const ListItem = ({
       gap="2"
       justifyContent="space-between"
       {...rest}
-    >      
+    >    
       {variant === "single" && (
         <Box justifyContent="center" flex={1}>
           <Text variant="variant-2" color={labelColor}>

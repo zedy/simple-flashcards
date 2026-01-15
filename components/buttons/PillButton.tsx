@@ -44,15 +44,12 @@ const PillButton = ({
       }
       const pillVariant = theme.pillVariants[variant];
       const { backgroundColor, backgroundColorPressed, backgroundColorDisabled } = pillVariant;
-      const backgroundColorToggled = (pillVariant as any)?.backgroundColorToggled;
 
       if (disabled) return backgroundColorDisabled;
-      if (checked && variant === "toggle" && backgroundColorToggled) return backgroundColorToggled;
-      if (checked && backgroundColorToggled) return backgroundColorToggled;
       if (pressed) return backgroundColorPressed;
       return backgroundColor;
     },
-    [theme, variant, disabled, checked],
+    [theme, variant, disabled],
   );
 
   const getLabelColor = useCallback(
@@ -75,13 +72,10 @@ const PillButton = ({
     if (!theme?.pillVariants[variant]) {
       return "transparent";
     }
-    const { borderColor, borderColorPressed, borderColorDisabled, borderColorDisabledToggled } =
+    const { borderColor, borderColorPressed, borderColorDisabled } =
       theme.pillVariants[variant];
-    const borderColorToggled = (theme.pillVariants[variant] as any)?.borderColorToggled;
 
-    if (checked && !disabled && borderColorToggled) return borderColorToggled;
     if (checked && !disabled) return borderColorPressed;
-    if (checked && disabled) return borderColorDisabledToggled;
     if (!checked && disabled) return borderColorDisabled;
 
     return borderColor;
@@ -96,7 +90,7 @@ const PillButton = ({
   // @ts-expect-error - boxShadow is not in the type definition but exists in theme
   const boxShadow = pillVariant?.boxShadow;
   // Only apply shadow when not checked (white background state) for toggle variant
-  const shouldShowShadow = boxShadow && variant === "toggle" && !checked && !disabled;
+  const shouldShowShadow = boxShadow && !checked && !disabled;
 
   return (
     <Pressable

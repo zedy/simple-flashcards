@@ -14,7 +14,7 @@ export default function NotFoundView({
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header
         title={title}
@@ -27,7 +27,7 @@ export default function NotFoundView({
       >
         <TextView
           variant="variant-2"
-          color="interactive-text-dark-1"
+          color="interactive-text-1"
         >
           {message}
         </TextView>

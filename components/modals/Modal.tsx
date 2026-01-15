@@ -1,10 +1,13 @@
+import { useTheme } from "@shopify/restyle";
 import { X } from "lucide-react-native";
 import React from "react";
 import { Modal as RNModal, type ModalProps as RNModalProps, StyleSheet, TouchableWithoutFeedback } from "react-native";
 
+import type { Theme } from "@/utils/theme/restyleTheme";
+
 import Box from "../Box";
 import Pressable from "../Pressable";
-import TextView from '../text/Text';
+import TextView from "../text/Text";
 
 export interface ModalProps extends RNModalProps {
   visible: boolean;
@@ -14,6 +17,7 @@ export interface ModalProps extends RNModalProps {
 }
 
 const Modal = ({ visible, onClose, children, title, hideHeader, ...rest }: ModalProps) => {
+  const theme = useTheme<Theme>();
   return (
     <RNModal
       transparent
@@ -39,29 +43,42 @@ const Modal = ({ visible, onClose, children, title, hideHeader, ...rest }: Modal
           />
         </TouchableWithoutFeedback>
         <Box
-          backgroundColor="elevation-background-dark-2"
+          backgroundColor="elevation-background-3"
           margin="12"
           borderRadius="2xl"
           borderColor="interactive-border-1"
           borderWidth={1}
           flex={1}
         >
-          {!hideHeader && (<Box padding={"4"} flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} paddingBottom={"0"}>
-            <TextView color={"interactive-text-dark-1"} variant={"variant-3-bold"}>{title}</TextView>
-            <Box alignItems="flex-end">
-              <Pressable
-                onPress={onClose}
-                padding="4"
-                paddingRight="0"
+          {!hideHeader && (
+            <Box
+              padding={"4"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              paddingBottom={"0"}
+            >
+              <TextView
+                color={"interactive-text-1"}
+                variant={"variant-3-bold"}
               >
-                <X
-                  width={24}
-                  height={24}
-                  color={"#DBDBDB"}
-                />
-              </Pressable>
+                {title}
+              </TextView>
+              <Box alignItems="flex-end">
+                <Pressable
+                  onPress={onClose}
+                  padding="4"
+                  paddingRight="0"
+                >
+                  <X
+                    width={24}
+                    height={24}
+                    color={theme.colors["interactive-text-1"]}
+                  />
+                </Pressable>
+              </Box>
             </Box>
-          </Box>)}
+          )}
           {children}
         </Box>
       </Box>

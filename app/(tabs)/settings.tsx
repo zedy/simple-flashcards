@@ -7,6 +7,7 @@ import Toggle from "@/components/buttons/Toggle";
 import Header from "@/components/Header";
 import TextView from "@/components/text/Text";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import { ThemeEnum } from "@/types";
 
 export default function SettingsScreen() {
   const { settings, updateSetting, hydrate } = useSettingsStore();
@@ -20,15 +21,15 @@ export default function SettingsScreen() {
   };
 
   const handleToggleTheme = () => {
-    updateSetting("theme", settings.theme === "dark" ? "light" : "dark");
+    updateSetting("theme", settings.theme === ThemeEnum.dark ? ThemeEnum.light : ThemeEnum.dark);
   };
 
-  const isDark = settings.theme === "dark";
+  const isDark = settings.theme === ThemeEnum.dark;
 
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header title="Settings" />
       <Box
@@ -37,11 +38,11 @@ export default function SettingsScreen() {
         gap={"4"}
       >
         <Box flexDirection={"row"} width={"100%"} justifyContent={"space-between"} alignItems={"center"} paddingBottom={"2"}>
-          <TextView variant={"variant-2-bold"} color={"interactive-primary-text-idle"}>Theme</TextView>
+          <TextView variant={"variant-3-bold"} color={"interactive-primary-text-idle"}>Theme</TextView>
           <IconButton variant='transparent' icon={isDark ? <MoonIcon size={32} /> : <SunIcon size={32} />} iconColor='interactive-primary-text-idle' onPress={handleToggleTheme} />
         </Box>
         <Box flexDirection={"row"} width={"100%"} justifyContent={"space-between"} alignItems={"center"} paddingRight={"2"}>
-          <TextView variant={"variant-2-bold"} color={"interactive-primary-text-idle"}>Show progress bar</TextView>
+          <TextView variant={"variant-3-bold"} color={"interactive-primary-text-idle"}>Show progress bar</TextView>
           <Toggle id={"1"} onChange={handleToggleProgressBar} checked={settings.showProgressBar} />
         </Box>
       </Box>

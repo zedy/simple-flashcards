@@ -27,7 +27,7 @@ export default function SetsScreen() {
   return (
     <Box
       flex={1}
-      backgroundColor="elevation-background-dark-2"
+      backgroundColor="elevation-background-3"
     >
       <Header title="YOUR SETS" />
       {setList ? (

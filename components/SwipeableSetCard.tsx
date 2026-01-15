@@ -2,11 +2,7 @@ import { useRouter } from "expo-router";
 import { PencilIcon, PlayIcon, Trash2Icon } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
 
@@ -110,7 +106,10 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
   }));
 
   return (
-    <Box width="100%">
+    <Box
+      width="100%"
+      
+    >
       <Box
         position="absolute"
         right={0}
@@ -123,7 +122,10 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
         gap="2"
       >
         <Animated.View style={[actionsAnimatedStyle]}>
-          <Box flexDirection="row" gap="2">
+          <Box
+            flexDirection="row"
+            gap="2"
+          >
             <IconButton
               onPress={handlePlay}
               variant="transparent"
@@ -154,7 +156,10 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
 
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[animatedStyle, { width: "100%" }]}>
-          <SetCard data={data} count={count} />
+          <SetCard
+            data={data}
+            count={count}
+          />
         </Animated.View>
       </GestureDetector>
 
@@ -163,7 +168,10 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
         title="Delete Set?"
         onClose={() => setIsDeleteConfirmModalOpen(false)}
       >
-        <DeleteSetConfirmModal callback={handleDeleteConfirm} name={data.name} />
+        <DeleteSetConfirmModal
+          callback={handleDeleteConfirm}
+          name={data.name}
+        />
       </Modal>
     </Box>
   );

@@ -60,7 +60,7 @@ const Toggle = ({ onChange, checked, disabled, id }: ToggleProps) => {
           width={19}
           height={19}
           borderRadius="m"
-          backgroundColor="elevation-background-dark-2"
+          backgroundColor="elevation-background-3"
           style={[
             {
               transform: [

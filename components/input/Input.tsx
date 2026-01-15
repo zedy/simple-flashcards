@@ -118,7 +118,7 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
   const borderColor = customBorderColor ?? getBorderColor(active);
   const labelColor = getLabelColor(active);
   const inputColor = getInputColor(active);
-  const placeholderTextColor = variant === "filled" ? "elevation-background-dark-2" : "interactive-text-dark-1";
+  const placeholderTextColor = "interactive-primary-text-pressed";
   const { marginVertical = "0", ...pressableProps } = rest;
 
   return (
@@ -151,9 +151,9 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
         backgroundColor={backgroundColor}
         borderColor={borderColor}
         borderWidth={1}
-        borderRadius={borderRadius ?? (variant !== "outlined" ? "rounding-button-rounding" : "rounding-input-rounding")}
+        borderRadius={"rounding-button-rounding"}
         height={type === "textArea" ? "100%" : 54}
-        paddingHorizontal={variant === "outlined" ? "5" : "height-height-m"}
+        paddingHorizontal={"height-height-m"}
         paddingVertical={
           variant === "outlined"
             ? "4"
@@ -174,14 +174,14 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
           editable={!disabled && !onPress}
           accessibilityLabel={label}
           placeholder={placeholder}
-          placeholderTextColor={theme.colors[placeholderTextColor]}          
+          placeholderTextColor={theme.colors[placeholderTextColor]}
           style={{
             color: theme.colors[inputColor],
             fontSize: theme.textVariants[textVariant].fontSize,
             fontFamily: theme.textVariants[textVariant].fontFamily,
             paddingVertical: 0,
             outline: "none",
-            height: type === "textArea"? "100%" : "auto"
+            height: type === "textArea" ? "100%" : "auto"
           }}
           multiline={type === "textArea"}
           textAlignVertical={type === "textArea" ? "top" : "center"}
@@ -210,7 +210,7 @@ const Input = React.forwardRef<RNTextInput, InputProps>(({
               {error}
             </Text>
           )}
-        </Box>        
+        </Box>
       </Box>
     </Pressable>
   );

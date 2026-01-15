@@ -251,7 +251,7 @@ const Select = ({
             >
               <Text
                 variant="variant-3-bold"
-                color={"interactive-text-dark-1"}
+                color={"interactive-text-1"}
               >
                 {label}
               </Text>
