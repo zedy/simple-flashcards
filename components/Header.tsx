@@ -18,7 +18,14 @@ interface HeaderProps {
   onBackPress?: () => void;
 }
 
-export default function Header({ title, titleSuffix, showBackButton = false, showLogo = false, children, onBackPress }: HeaderProps) {
+export default function Header({
+  title,
+  titleSuffix,
+  showBackButton = false,
+  showLogo = false,
+  children,
+  onBackPress,
+}: HeaderProps) {
   const router = useRouter();
   const theme = useTheme<Theme>();
 
@@ -39,8 +46,8 @@ export default function Header({ title, titleSuffix, showBackButton = false, sho
       alignItems="center"
       height={68}
       justifyContent="space-between"
-      borderBottomColor={"interactive-border-1"}
-      borderBottomWidth={1}
+      style={{ boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px` }}
+      zIndex={1}
     >
       <Box width={40}>
         {showBackButton && (
@@ -52,7 +59,10 @@ export default function Header({ title, titleSuffix, showBackButton = false, sho
           </TouchableOpacity>
         )}
         {showLogo && (
-          <Logo width={32} height={32} />
+          <Logo
+            width={32}
+            height={32}
+          />
         )}
       </Box>
 
@@ -67,12 +77,14 @@ export default function Header({ title, titleSuffix, showBackButton = false, sho
         >
           {title}
         </TextView>
-        {titleSuffix && (<TextView
-          variant="variant-4-bold"
-          color="interactive-border-1"
-        >
-          {titleSuffix}
-        </TextView>)}
+        {titleSuffix && (
+          <TextView
+            variant="variant-4-bold"
+            color="interactive-border-1"
+          >
+            {titleSuffix}
+          </TextView>
+        )}
       </Box>
 
       <Box

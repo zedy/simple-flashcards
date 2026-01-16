@@ -9,6 +9,7 @@ const darkColors = {
   "elevation-background-4": "#1F1F1F",
   "elevation-outline-1": "#e5e7ebff",
   "elevation-outline-2": "#d1d5dbff",
+  "handle-drag": "#5E5E5E",
   "interactive-text-1": "#DBDBDB",
   "interactive-border-1": "#858585",
   "drawer-border": "#858585",
@@ -57,6 +58,9 @@ const darkColors = {
   "interactive-outlined-disabled": "#9ca3afff",
   "interactive-text-disabled": "#6b7280ff",
   "interactive-text-on-bg": "#1f2937ff",
+  "shadow-light": "rgba(0, 0, 0, 0.05)",
+  "shadow-medium": "rgba(0, 0, 0, 0.2)",
+  "shadow-dark": "rgba(0, 0, 0, 0.25)",
 };
 
 // Light theme colors (duplicate for now - you'll customize these)
@@ -67,7 +71,7 @@ const lightColors = {
   "elevation-background-3": "#E3E3E3",
   "elevation-background-4": "#DBDBDB",
   "interactive-text-1": "#111827",
-  "interactive-border-1": "#858585",
+  "handle-drag": "#cccccc",
   "drawer-border": "#303030",
   "button-text-color": "#DBDBDB",
   "interactive-primary-text-idle": "#111827",
@@ -84,6 +88,9 @@ const lightColors = {
   "interactive-icon-pressed": "#04954F",
   "interactive-icon-disabled": "#6b7280ff",
   "interactive-primary-on": "#25786E",
+  "shadow-light": "rgba(0, 0, 0, 0.05)",
+  "shadow-medium": "rgba(0, 0, 0, 0.1)",
+  "shadow-dark": "rgba(0, 0, 0, 0.2)",
 };
 
 // Shared theme configuration

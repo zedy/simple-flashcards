@@ -1,10 +1,8 @@
-import { useTheme } from "@shopify/restyle";
 import { useRouter } from "expo-router";
-import { GripVerticalIcon } from "lucide-react-native";
 import { StyleSheet } from 'react-native';
 
 import type { FlashcardSet } from "@/stores/useSetsStore";
-import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
+import type { ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "./Box";
 import Pressable from "./Pressable";
@@ -16,7 +14,6 @@ interface SetCardProps {
 }
 
 export const SetCard = ({ data, count }: SetCardProps) => {
-  const theme = useTheme<Theme>();
   const router = useRouter();
 
   const handleCardPress = () => {
@@ -61,10 +58,7 @@ export const SetCard = ({ data, count }: SetCardProps) => {
             <TextView color={"interactive-primary-text-pressed"}>{`${count} cards`}</TextView>
           </Box>
         </Box>
-        <GripVerticalIcon
-          color={theme.colors["interactive-text-1"]}
-          size={24}
-        />
+        <Box backgroundColor={"handle-drag"} width={5} height={48} borderRadius={"full"}/>
       </Box>
     </Pressable>
   );

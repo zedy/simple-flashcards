@@ -17,10 +17,9 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarStyle: {
           backgroundColor: theme.colors["elevation-background-4"],
-          borderTopColor: theme.colors["interactive-border-1"],
-          borderTopWidth: 1,
+          boxShadow: `${theme.colors["shadow-medium"]} 0px -4px 4px 0px`,
           paddingVertical: 10,
-          height: 70,
+          height: 68,
         },
         tabBarItemStyle: {
           alignItems: "center",

@@ -27,7 +27,8 @@ export default function EditSetScreen() {
       backgroundColor="elevation-background-3"
     >
       <Header
-        title={`Edit ${currentSet.name.toUpperCase()}`}
+        title='Editing'
+        titleSuffix={currentSet.name}
         showBackButton
       />
       <SetForm data={currentSet} />
