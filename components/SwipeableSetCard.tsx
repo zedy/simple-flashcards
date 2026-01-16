@@ -1,10 +1,10 @@
 import { useRouter } from "expo-router";
 import { PencilIcon, PlayIcon, Trash2Icon } from "lucide-react-native";
-import { useEffect, useState } from "react";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { useRef, useState } from "react";
+import { StyleSheet } from "react-native";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { SWIPEABLE_CARD_DURATION, SWIPEABLE_CARD_NAVIGATION_DELAY } from "@/constants/shared";
+import { SWIPEABLE_CARD_NAVIGATION_DELAY } from "@/constants/shared";
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
 
 import Box from "./Box";
@@ -20,38 +20,19 @@ interface SwipeableSetCardProps {
   onSwipeChange: (cardId: string | null) => void;
 }
 
-const SWIPE_THRESHOLD = -200;
-
 export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: SwipeableSetCardProps) => {
   const router = useRouter();
-  const translateX = useSharedValue(0);
+  const swipeableRef = useRef<Swipeable>(null);
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
   const { removeSet } = useSetsStore();
 
-  // Close the card when isOpen becomes false
-  useEffect(() => {
-    if (!isOpen) {
-      translateX.value = withTiming(0, {
-        duration: SWIPEABLE_CARD_DURATION,
-      });
-    }
-  }, [isOpen]);
-
-  const resetSwipe = () => {
-    translateX.value = withTiming(0, {
-      duration: SWIPEABLE_CARD_DURATION,
-    });
-    onSwipeChange(null);
-  };
-
   const handleDelete = () => {
     setIsDeleteConfirmModalOpen(true);
-    resetSwipe();
+    swipeableRef.current?.close();
   };
 
   const handleEdit = () => {
-    resetSwipe();
-    // Delay navigation slightly to allow animation to start
+    swipeableRef.current?.close();
     setTimeout(() => {
       router.push(`/(tabs)/edit-set?id=${data.id}`);
     }, SWIPEABLE_CARD_NAVIGATION_DELAY);
@@ -59,8 +40,7 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
 
   const handlePlay = () => {
     if (count > 0) {
-      resetSwipe();
-      // Delay navigation slightly to allow animation to start
+      swipeableRef.current?.close();
       setTimeout(() => {
         router.push(`/(tabs)/play?setId=${data.id}`);
       }, SWIPEABLE_CARD_NAVIGATION_DELAY);
@@ -72,97 +52,48 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
     setIsDeleteConfirmModalOpen(false);
   };
 
-  const panGesture = Gesture.Pan()
-    .activeOffsetX([-10, 10])
-    .onUpdate((event) => {
-      // Only allow swiping left
-      if (event.translationX < 0) {
-        translateX.value = Math.max(event.translationX, SWIPE_THRESHOLD);
-      } else if (translateX.value < 0) {
-        translateX.value = event.translationX + translateX.value;
-      }
-    })
-    .onEnd((event) => {
-      if (translateX.value < SWIPE_THRESHOLD / 2) {
-        // Swipe far enough, show actions
-        translateX.value = withTiming(SWIPE_THRESHOLD, {
-          duration: SWIPEABLE_CARD_DURATION,
-        });
-        onSwipeChange(data.id);
-      } else {
-        // Not far enough, reset
-        translateX.value = withTiming(0, {
-          duration: SWIPEABLE_CARD_DURATION,
-        });
-        onSwipeChange(null);
-      }
-    });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  const actionsAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: translateX.value < -10 ? 1 : 0,
-  }));
+  const renderRightActions = () => (
+    <Box gap={"2"} flexDirection={"row"} alignItems={"center"}>
+      <IconButton
+        onPress={handlePlay}
+        variant="transparent"
+        size="m"
+        icon={<PlayIcon size={24} />}
+        iconColor={count > 0 ? "interactive-card-green" : "interactive-primary-text-pressed"}
+        iconSize={24}
+        style={styles.actionButton}
+      />
+      <IconButton
+        onPress={handleEdit}
+        variant="transparent"
+        size="m"
+        icon={<PencilIcon size={24} />}
+        iconColor="interactive-orange"
+        iconSize={24}
+        style={styles.actionButton}
+      />
+      <IconButton
+        onPress={handleDelete}
+        variant="transparent"
+        size="m"
+        icon={<Trash2Icon size={24} />}
+        iconColor="informational-error"
+        iconSize={24}
+        style={styles.actionButton}
+      />
+    </Box>
+  );
 
   return (
-    <Box
-      width="100%"
-      
-    >
-      <Box
-        position="absolute"
-        right={0}
-        top={0}
-        bottom={0}
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="flex-end"
-        paddingRight="2"
-        gap="2"
+    <Box width="100%">
+      <Swipeable
+        ref={swipeableRef}
+        renderRightActions={renderRightActions}
+        overshootRight={false}
+        friction={2}
       >
-        <Animated.View style={[actionsAnimatedStyle]}>
-          <Box
-            flexDirection="row"
-            gap="2"
-          >
-            <IconButton
-              onPress={handlePlay}
-              variant="transparent"
-              size="m"
-              icon={<PlayIcon size={24} />}
-              iconColor={count > 0 ? "interactive-card-green" : "interactive-primary-text-pressed"}
-              iconSize={24}
-            />
-            <IconButton
-              onPress={handleEdit}
-              variant="transparent"
-              size="m"
-              icon={<PencilIcon size={24} />}
-              iconColor="interactive-orange"
-              iconSize={24}
-            />
-            <IconButton
-              onPress={handleDelete}
-              variant="transparent"
-              size="m"
-              icon={<Trash2Icon size={24} />}
-              iconColor="informational-error"
-              iconSize={24}
-            />
-          </Box>
-        </Animated.View>
-      </Box>
-
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[animatedStyle, { width: "100%" }]}>
-          <SetCard
-            data={data}
-            count={count}
-          />
-        </Animated.View>
-      </GestureDetector>
+        <SetCard data={data} count={count} />
+      </Swipeable>
 
       <Modal
         visible={isDeleteConfirmModalOpen}
@@ -177,3 +108,9 @@ export const SwipeableSetCard = ({ data, count, isOpen, onSwipeChange }: Swipeab
     </Box>
   );
 };
+
+const styles = StyleSheet.create({
+  actionButton: {
+    alignSelf: "center"
+  },
+});

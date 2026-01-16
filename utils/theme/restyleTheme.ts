@@ -440,7 +440,7 @@ const sharedConfig = {
   },
   toastVariants: {
     neutral: {
-      backgroundColor: "interactive-secondary-idle",
+      backgroundColor: "interactive-primary-text-pressed",
     },
     success: {
       backgroundColor: "informational-success",
@@ -466,9 +466,9 @@ const sharedConfig = {
       borderRadius: "none",
     },
     action: {
-      backgroundColor: "elevation-background",
-      backgroundColorSelected: "elevation-background",
-      backgroundColorPressed: "elevation-background",
+      backgroundColor: "elevation-background-1",
+      backgroundColorSelected: "elevation-background-1",
+      backgroundColorPressed: "elevation-background-1",
       labelColor: "interactive-text-on-bg",
       labelColorSelected: "interactive-text-1",
       labelColorPressed: "interactive-text-pressed",

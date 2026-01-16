@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { ChevronLeft, ChevronRight, RotateCcw, Shuffle } from "lucide-react-native";
 import React from "react";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
@@ -10,10 +11,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { CARD_FLIP_DURATION, CARD_SWIPE_RESET_DURATION } from "@/constants/shared";
+import {
+  CARD_FLIP_DURATION,
+  CARD_SWIPE_RESET_DURATION,
+  PROGRESS_BAR_ANIMATION_DURATION,
+} from "@/constants/shared";
 import type { Card } from "@/stores/useSetsStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
-import type { ThemeColor } from "@/utils/theme/restyleTheme";
+import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 
 import Box from "./Box";
 import IconButton from "./buttons/IconButton";
@@ -55,9 +60,11 @@ export const DoubleCards = ({
   returnTo = "setcard",
   progressColor = "interactive-primary-bg-idle",
 }: DoubleCardsProps) => {
+  const theme = useTheme<Theme>();
   const { settings } = useSettingsStore();
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(0);
+  const progressWidth = useSharedValue(progress);
 
   // Flip animation
   const animatedCardStyle = useAnimatedStyle(() => {
@@ -85,6 +92,13 @@ export const DoubleCards = ({
     });
   }, [isFlipped]);
 
+  // Animate progress bar
+  React.useEffect(() => {
+    progressWidth.value = withTiming(progress, {
+      duration: PROGRESS_BAR_ANIMATION_DURATION,
+    });
+  }, [progress]);
+
   // Swipe gesture for navigation
   const panGesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -109,6 +123,16 @@ export const DoubleCards = ({
     transform: [{ translateX: translateX.value }],
   }));
 
+  const progressBarStyle = useAnimatedStyle(() => ({
+    width: `${progressWidth.value}%`,
+  }));
+
+  const cardStyle = {
+    ...styles.card,
+    backgroundColor: theme.colors["elevation-background-1"],
+    boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px`
+  };
+
   return (
     <Box
       flex={1}
@@ -119,17 +143,22 @@ export const DoubleCards = ({
         <Box
           width="100%"
           gap="2"
-        >
+          >
           <Box
             height={8}
             backgroundColor="elevation-background-1"
             borderRadius="m"
             overflow="hidden"
+            style={{ boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px` }}
           >
-            <Box
-              height="100%"
-              backgroundColor={progressColor}
-              width={`${progress}%`}
+            <Animated.View
+              style={[
+                {
+                  height: "100%",
+                  backgroundColor: theme.colors[progressColor],
+                },
+                progressBarStyle,
+              ]}
             />
           </Box>
           <TextView
@@ -148,7 +177,7 @@ export const DoubleCards = ({
             onPress={onFlip}
             style={styles.cardPressable}
           >
-            <Animated.View style={[styles.card, styles.cardFront, animatedCardStyle]}>
+            <Animated.View style={[cardStyle, styles.cardFront, animatedCardStyle]}>
               <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="front" />
               <ScrollView
                 style={styles.cardScrollView}
@@ -174,7 +203,7 @@ export const DoubleCards = ({
               </ScrollView>
             </Animated.View>
 
-            <Animated.View style={[styles.card, styles.cardBack, animatedBackStyle]}>
+            <Animated.View style={[cardStyle, styles.cardBack, animatedBackStyle]}>
               <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="back" />
               <ScrollView
                 style={styles.cardScrollView}
@@ -192,15 +221,15 @@ export const DoubleCards = ({
               </ScrollView>
             </Animated.View>
           </Pressable>
-            <Box flexDirection={"row"} alignSelf={"flex-start"} paddingTop={"2"} height={24}>
-              <TextView
-                variant="variant-2-medium"
-                color="interactive-primary-text-pressed"
-                textAlign="center"
-              >
-                {card.tagLabel}
-              </TextView>
-            </Box>
+          <Box flexDirection={"row"} alignSelf={"flex-start"} paddingTop={"2"} height={24}>
+            <TextView
+              variant="variant-2-medium"
+              color="interactive-primary-text-pressed"
+              textAlign="center"
+            >
+              {card.tagLabel}
+            </TextView>
+          </Box>
         </Animated.View>
       </GestureDetector>
       <Box gap="4">
@@ -271,7 +300,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "#303030",
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",

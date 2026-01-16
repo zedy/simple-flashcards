@@ -110,7 +110,7 @@ const PillButton = ({
         paddingHorizontal: pillSize.horizontal,
         paddingVertical: pillSize.vertical,
         overflow: "visible",
-        ...(shouldShowShadow && theme.shadows[boxShadow]),
+        ...(shouldShowShadow && theme.shadows[boxShadow as keyof Theme["shadows"]]),
         ...style,
       }}
       {...rest}

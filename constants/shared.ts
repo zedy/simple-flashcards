@@ -13,6 +13,7 @@ export const LIST_ITEM_SPRING_STIFFNESS = 150;
 // Card Flip Animation (DoubleCards)
 export const CARD_FLIP_DURATION = 300;
 export const CARD_SWIPE_RESET_DURATION = 200;
+export const PROGRESS_BAR_ANIMATION_DURATION = 300;
 
 // Swipeable Card Animation
 export const SWIPEABLE_CARD_DURATION = 200;

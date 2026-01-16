@@ -27,8 +27,8 @@ export default function EditSetScreen() {
       backgroundColor="elevation-background-3"
     >
       <Header
-        title='Editing'
-        titleSuffix={currentSet.name}
+        title={currentSet.name}
+        titleSuffix='Editing'
         showBackButton
       />
       <SetForm data={currentSet} />

@@ -137,21 +137,6 @@ const Select = ({
     );
   };
 
-  const SelectMultipleItem = ({ item }: { item: { label: string; value: string; sublabel?: string } }) => {
-    const singleIsSelected = selectedValue.includes(item.value);
-    return (
-      <ListItem
-        variant="multiple"
-        selected={singleIsSelected}
-        label={item.label}
-        sublabel={item.sublabel}
-        onPress={() => {
-          handleMultipleSelect(item.value);
-        }}
-      />
-    );
-  };
-
   const parsedSelectedValue =
     type === "multiple" && Array.isArray(selectedValue)
       ? selectedValue.map((val) => items.find((item) => item.value === val)?.label || val).join(", ")
@@ -184,18 +169,18 @@ const Select = ({
         </Box>
       );
     }
-    return type === "single" ? <SelectSingleItem item={item} /> : <SelectMultipleItem item={item} />;
+    return <SelectSingleItem item={item} />
   };
 
   const parsedItems = [
     ...(filterable
       ? [
-          {
-            type: "search",
-            label: "",
-            value: "",
-          },
-        ]
+        {
+          type: "search",
+          label: "",
+          value: "",
+        },
+      ]
       : []),
     ...items.filter((item) => item.label.toLowerCase().includes(filterValue.toLowerCase())),
   ] as {

@@ -54,7 +54,6 @@ export type PillButtonVariant = keyof typeof PillButtonVariantEnum;
 
 export enum TextButtonVariantEnum {
   primary = "primary",
-  dual = "dual",
   toast = "toast",
 }
 

@@ -1,11 +1,11 @@
-import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
+import { StyleSheet, type StyleProp, type TextStyle } from "react-native";
 
 import TextView from "./text/Text";
 
 interface CharacterCounterProps {
   current: number;
   max: number;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
 }
 
 export const CharacterCounter = ({ current, max, style }: CharacterCounterProps) => {

@@ -13,7 +13,7 @@ import { darkTheme, lightTheme } from "@/utils/theme/restyleTheme";
 /* eslint-disable-next-line */
 type AnyChildren = PropsWithChildren<any>;
 
-export const combineProviders = <ComponentType extends FC>(...components: PropsWithChildren<ComponentType>[]) => {
+export const combineProviders = (...components: any[]) => {
   return components.reduce(
     (AccumulatedComponents: AnyChildren, CurrentComponent: AnyChildren) => {
       return ({ children }: AnyChildren) => {
@@ -24,7 +24,7 @@ export const combineProviders = <ComponentType extends FC>(...components: PropsW
         );
       };
     },
-    ({ children }) => <>{children}</>
+    ({ children }: AnyChildren) => <>{children}</>
   );
 };
 
