@@ -19,7 +19,7 @@ export default function TabLayout() {
           backgroundColor: theme.colors["elevation-background-4"],
           boxShadow: `${theme.colors["shadow-medium"]} 0px -4px 4px 0px`,
           paddingVertical: 10,
-          height: 68,
+          height: 92,
         },
         tabBarItemStyle: {
           alignItems: "center",

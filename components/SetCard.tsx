@@ -40,9 +40,12 @@ export const SetCard = ({ data, count }: SetCardProps) => {
           flexDirection={"row"}
           gap={"3"}
         >
-          <Box justifyContent={"center"}>
+          <Box justifyContent={"center"} alignItems={"center"}>
             <TextView
               fontSize={36}
+              lineHeight={44}
+              flex={1}
+              paddingTop={"1"}
               color={"interactive-primary-text-idle"}
             >
               {data.icon}

@@ -116,13 +116,13 @@ const Drawer = ({
       <Box alignSelf={"center"} width={110} height={4} backgroundColor={"interactive-border-1"} borderRadius={"full"} flexDirection={"row"} justifyContent={"center"} />
       <Box
         paddingTop="0"
-        backgroundColor="elevation-background-2"
+        backgroundColor="elevation-background-1"
       >
         {children}
       </Box>
       {hasActions && (
         <Box
-          backgroundColor="elevation-background-2"
+          backgroundColor="elevation-background-1"
           p="4"
         >
           <ListItem
@@ -179,7 +179,7 @@ const Drawer = ({
         backgroundColor: "transparent",
       }}
       handleStyle={{
-        backgroundColor: theme.colors["elevation-background-2"],
+        backgroundColor: theme.colors["elevation-background-1"],
         borderTopLeftRadius: theme.borderRadii["4xl"],
         borderTopRightRadius: theme.borderRadii["4xl"],
         borderTopColor: theme.colors['interactive-border-1'],
@@ -187,7 +187,7 @@ const Drawer = ({
         height: 0,
       }}
       backgroundStyle={{
-        backgroundColor: theme.colors["elevation-background-2"],
+        backgroundColor: theme.colors["elevation-background-1"],
         borderTopLeftRadius: theme.borderRadii["4xl"],
         borderTopRightRadius: theme.borderRadii["4xl"],
       }}
@@ -205,7 +205,7 @@ const Drawer = ({
         {scrollable ? (
           <BottomSheetScrollView
             style={{
-              backgroundColor: theme.colors["elevation-background-2"],
+              backgroundColor: theme.colors["elevation-background-1"],
             }}
             contentContainerStyle={{
               paddingBottom: Math.max(insets.bottom, 4),

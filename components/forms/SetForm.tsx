@@ -1,16 +1,17 @@
 import { useTheme } from "@shopify/restyle";
+import * as Crypto from "expo-crypto";
 import { useRouter } from "expo-router";
 import { Clipboard, CornerDownLeft, InfoIcon, Tag } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { ScrollView, StyleSheet, type TextInput } from "react-native";
+import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import PillButton from "@/components/buttons/PillButton";
 import { CharacterCounter } from "@/components/CharacterCounter";
 import Input from "@/components/input/Input";
-import { EmojiPickerDrawer } from "@/components/modals/content/EmojiPickerDrawer";
 import TextView from "@/components/text/Text";
 import { FORM_FOCUS_DELAY } from "@/constants/shared";
 import { SetCreationSchema, type SetCreationSchemaDTO } from "@/data/models/Set.models";
@@ -70,7 +71,7 @@ export default function SetForm({ data }: SetFormProps) {
     } else {
       // Create new set
       addSet({
-        id: crypto.randomUUID(),
+        id: Crypto.randomUUID(),
         name: formData.name,
         tags,
         label,
@@ -106,8 +107,8 @@ export default function SetForm({ data }: SetFormProps) {
     setIsEmojiPickerOpen(true);
   };
 
-  const handleEmojiSelected = (emoji: string) => {
-    setEmoji(emoji);
+  const handleEmojiSelected = (emojiObj: EmojiType) => {
+    setEmoji(emojiObj.emoji);
   };
 
   const onSubmit = (data: SetCreationSchemaDTO) => {
@@ -137,7 +138,7 @@ export default function SetForm({ data }: SetFormProps) {
       ...state,
       {
         name: tag,
-        id: crypto.randomUUID(),
+        id: Crypto.randomUUID(),
       },
     ]);
     setTag("");
@@ -167,8 +168,7 @@ export default function SetForm({ data }: SetFormProps) {
         <Box
           alignItems={"center"}
           gap={"2"}
-          paddingTop={"8"}
-          paddingBottom={"2"}
+          paddingVertical={"8"}
         >
           <Box
             borderRadius={"full"}
@@ -181,7 +181,6 @@ export default function SetForm({ data }: SetFormProps) {
             paddingTop={"3"}
           >
             <TextView
-              variant="variant-3"
               lineHeight={80}
               fontSize={64}
               onPress={callEmojiPickerDrawer}
@@ -210,13 +209,17 @@ export default function SetForm({ data }: SetFormProps) {
                 onChangeText={onChange}
                 error={errors.name?.message}
               />
-              <CharacterCounter current={value?.length || 0} max={16} />
+              <CharacterCounter
+                current={value?.length || 0}
+                max={16}
+              />
             </>
           )}
         />
         <Box
           width={"100%"}
-          paddingTop={"6"}
+          paddingTop={"4"}
+          paddingBottom={"8"}
         >
           <Box
             width={"100%"}
@@ -244,7 +247,10 @@ export default function SetForm({ data }: SetFormProps) {
                 error={tagError}
                 width={"auto"}
               />
-              <CharacterCounter current={tag?.length || 0} max={20} />
+              <CharacterCounter
+                current={tag?.length || 0}
+                max={20}
+              />
             </Box>
             <IconButton
               icon={
@@ -315,19 +321,19 @@ export default function SetForm({ data }: SetFormProps) {
             </Box>
           </Box>
         </Box>
+        <Button
+          label={isEditMode ? "UPDATE" : "CREATE"}
+          onPress={handleSubmit(onSubmit)}
+          width="l"
+          textVariant="variant-2-bold"
+          variant="primary"
+          style={styles.addBtn}
+        />
       </ScrollView>
-      <Button
-        label={isEditMode ? "UPDATE" : "CREATE"}
-        onPress={handleSubmit(onSubmit)}
-        width="l"
-        textVariant="variant-2-bold"
-        variant="primary"
-        style={styles.addBtn}
-      />
-      <EmojiPickerDrawer
-        visible={isEmojiPickerOpen}
-        onClose={() => setIsEmojiPickerOpen(false)}
+      <EmojiPicker
         onEmojiSelected={handleEmojiSelected}
+        open={isEmojiPickerOpen}
+        onClose={() => setIsEmojiPickerOpen(false)}
       />
       <Modal
         hideHeader
@@ -350,7 +356,8 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   infoIcon: {
-    marginTop: 5,
+    marginTop: 0,
+    alignSelf: "flex-start",
   },
   scrollView: {
     flex: 1,

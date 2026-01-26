@@ -15,10 +15,7 @@ export default function PlayScreen() {
   const [activeSet, setActiveSet] = useState<FlashcardSet | undefined>(undefined);
   const { sets, cards: allCards } = useSetsStore();
 
-  // Get cards for this set
   const setCards = allCards.filter((card) => card.setId === setId);
-
-  // Initialize flashcard game
   const game = useFlashcardGame({ cards: setCards });
 
   useEffect(() => {
@@ -37,8 +34,18 @@ export default function PlayScreen() {
     }, 100);
   };
 
-  // Loading state
   if (!sets || !activeSet) {
+    return <LoadingScreen />;
+  }
+
+  // Check this set's cards, not all cards
+  if (setCards.length === 0) {
+    router.push(`/(tabs)/setcard-page?id=${setId}`);
+    return null;
+  }
+
+  // Guard against undefined currentCard (can happen during state sync)
+  if (!game.currentCard) {
     return <LoadingScreen />;
   }
 
@@ -49,7 +56,7 @@ export default function PlayScreen() {
     >
       <Header title={activeSet.name.toUpperCase()} showBackButton />
       <DoubleCards
-        card={game.currentCard!}
+        card={game.currentCard}
         isFlipped={game.isFlipped}
         currentIndex={game.currentIndex}
         totalCards={game.totalCards}

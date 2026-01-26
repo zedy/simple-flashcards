@@ -57,12 +57,11 @@ export const CardList = ({ cards, setId, color, search }: CardListProps) => {
           <Box
             width={"100%"}
             justifyContent={"center"}
-            flexDirection={"row"}
           >
             <IdCardIcon
               width={128}
               height={128}
-              color={theme.colors["drawer-border"]}
+              color={theme.colors["fallback-icon-idle"]}
             />
           </Box>
           <TextView

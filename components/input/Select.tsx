@@ -108,18 +108,6 @@ const Select = ({
     }, 200);
   };
 
-  const handleMultipleSelect = (value: string) => {
-    if (!Array.isArray(selectedValue)) {
-      return;
-    }
-    const exists = selectedValue.includes(value);
-    if (exists) {
-      onSelect(selectedValue.filter((item) => item !== value));
-    } else {
-      onSelect([...selectedValue, value]);
-    }
-  };
-
   const inputColor = getInputColor(pressed);
   const parsedInputColor = theme.colors[inputColor];
   const selectPlaceholder = placeholder || "Select an option";

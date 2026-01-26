@@ -1,16 +1,23 @@
-import { useRouter } from "expo-router";
-import { RefreshCcw } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useTheme } from "@shopify/restyle";
+import * as Crypto from "expo-crypto";
+import { useFocusEffect, useRouter } from "expo-router";
+import { LayoutGrid, RefreshCcw, TagIcon } from "lucide-react-native";
+import { useCallback, useEffect, useState } from "react";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
 import IconButton from "@/components/buttons/IconButton";
 import { CharacterCounter } from "@/components/CharacterCounter";
 import Input from "@/components/input/Input";
-import Select, { type SelectItem } from "@/components/input/Select";
-import TextView from "@/components/text/Text";
+import type { SelectItem } from "@/components/input/Select";
+import Pressable from "@/components/Pressable";
 import { type Card, useSetsStore } from "@/stores/useSetsStore";
+import type { Theme } from "@/utils/theme/restyleTheme";
 import { showToast } from "@/utils/toast";
+
+import { SelectSetDrawer } from "../SelectSetDrawer";
+import { SelectTagDrawer } from "../SelectTagDrawer";
+import TextView from "../text/Text";
 
 interface CardFormProps {
   data?: Card;
@@ -27,24 +34,29 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
   const [setItems, setSetItems] = useState<SelectItem[] | []>([]);
   const [tagList, setTagList] = useState<SelectItem[] | []>([]);
   const [setError, setSetError] = useState<string>();
-  const [cardTag, setCardTag] = useState<string>(data?.tag || "");
+  const [isSelectSetVisible, setIsSelectSetVisible] = useState<boolean>(false);
+  const [isSelectTagVisible, setIsSelectTagVisible] = useState<boolean>(false);
+  const [selectedTag, setSelectedTag] = useState<string>(data?.tag || "");
   const [textTopError, setTextTopError] = useState<string>();
   const [textBottomError, setTextBottomError] = useState<string>();
+  const theme = useTheme<Theme>();
   const isEditMode = !!data;
 
-  const handleSetSelection = (value: string | string[]) => {
+  const handleSetSelection = (value: string) => {
     setSelectedSet(value as string);
     setSetError(undefined);
+    setIsSelectSetVisible(false);
   };
 
   const handleTagSelection = (value: string | string[]) => {
-    setCardTag(value as string);
+    setSelectedTag(value as string);
+    setIsSelectTagVisible(false);
   };
 
   // Get tag label from selected tag ID
   const getTagLabel = (tagId: string): string => {
     if (!tagId) return "";
-    const tag = tagList.find(item => item.value === tagId);
+    const tag = tagList.find((item) => item.value === tagId);
     return tag?.label || "";
   };
 
@@ -57,26 +69,42 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
     );
 
     if (selectedSet && sets) {
-      const tags = sets.find((item) => item.id === selectedSet)?.tags.map((tag) => ({
-        label: tag.name,
-        value: tag.id,
-      }));
+      const tags = sets
+        .find((item) => item.id === selectedSet)
+        ?.tags.map((tag) => ({
+          label: tag.name,
+          value: tag.id,
+        }));
       setTagList(tags || []);
     }
   }, [selectedSet, sets]);
 
-  // Update form fields when data changes (when navigating to different cards)
   useEffect(() => {
     if (data) {
       setSelectedSet(data.setId);
       setTextTop(data.topText);
       setTextBottom(data.bottomText);
-      // Explicitly set tag, clearing it if not present
-      setCardTag(data.tag && data.tag.trim() !== "" ? data.tag : "");
+      setSelectedTag(data.tag && data.tag.trim() !== "" ? data.tag : "");
     } else if (prefilledSetId) {
       setSelectedSet(prefilledSetId);
     }
   }, [data, prefilledSetId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (!isEditMode) {
+          setTextTop("");
+          setTextBottom("");
+          setSelectedSet("");
+          setSelectedTag("");
+          setSetError(undefined);
+          setTextTopError(undefined);
+          setTextBottomError(undefined);
+        }
+      };
+    }, [isEditMode]),
+  );
 
   const handleSwitchText = () => {
     setTextBottom(textTop);
@@ -98,6 +126,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
     // Validation
     if (!selectedSet || selectedSet === "") {
       setSetError("Please select a set");
+      showToast({
+        variant: "error",
+        message: "Please choose a set",
+      });
       hasError = true;
     }
 
@@ -129,14 +161,14 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
           bottomText: textBottom,
           topText: textTop,
           setId: selectedSet,
-          tag: cardTag,
-          tagLabel: getTagLabel(cardTag),
+          tag: selectedTag,
+          tagLabel: getTagLabel(selectedTag),
         });
         showToast({
           variant: "success",
           message: "Card updated successfully",
         });
-        // Navigate based on returnTo (use selectedSet in case card was moved to a different set)
+
         if (returnTo === "play") {
           router.push(`/(tabs)/play?setId=${selectedSet}`);
         } else {
@@ -147,10 +179,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         addCard({
           bottomText: textBottom,
           topText: textTop,
-          id: crypto.randomUUID(),
+          id: Crypto.randomUUID(),
           setId: selectedSet,
-          tag: cardTag || "",
-          tagLabel: getTagLabel(cardTag),
+          tag: selectedTag || "",
+          tagLabel: getTagLabel(selectedTag),
         });
         setTextTop("");
         setTextBottom("");
@@ -170,55 +202,55 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
   return (
     <Box
       padding={"5"}
-      gap={"8"}
+      gap={"2"}
       flex={1}
       justifyContent={"space-between"}
       alignItems={"center"}
       paddingTop={"0"}
     >
       <Box
+        flexDirection={"row"}
+        alignItems={"center"}
         width={"100%"}
-        paddingTop={"8"}
+        paddingVertical={"6"}
+        justifyContent={"space-around"}
       >
-        <TextView
-          color={"interactive-text-1"}
-          textAlign={"center"}
+        <Pressable
+          onPress={() => setIsSelectSetVisible(true)}
+          flexDirection={"row"}
+          alignItems={"center"}
+          gap={"2"}
         >
-          Choose a set to add the card to *
-        </TextView>
-        <Select
-          variant="outlined"
-          label=""
-          placeholder="Choose a set ..."
-          onSelect={handleSetSelection}
-          selectedValue={selectedSet}
-          items={setItems}
-          error={setError}
-          fallbackText="You need to create a SET first before adding cards. Click on SETS and get started."
-          fallbackAction={{
-            button: "CREATE SET",
-            callback: handleGoToSetCreation
-          }}
-        />
-        {tagList.length > 0 && (
-          <>
-            <TextView
-              color={"interactive-text-1"}
-              textAlign={"center"}
-              paddingTop={"4"}
-            >
-              Choose an optional tag to add the card
-            </TextView>
-            <Select
-              variant="outlined"
-              label=""
-              placeholder="Add tag to card"
-              onSelect={handleTagSelection}
-              selectedValue={cardTag}
-              items={tagList}
-            />
-          </>
-        )}
+          <LayoutGrid
+            size={40}
+            color={setError ? theme.colors["informational-error"] : theme.colors["primary-color"]}
+          />
+          <TextView
+            color={"interactive-text-1"}
+            textAlign={"center"}
+            variant={"variant-3-medium"}
+          >
+            {sets.find((setItem) => setItem.id === selectedSet)?.name || "Select Set"}
+          </TextView>
+        </Pressable>
+        <Pressable
+          onPress={() => setIsSelectTagVisible(true)}
+          flexDirection={"row"}
+          alignItems={"center"}
+          gap={"2"}
+        >
+          <TagIcon
+            size={36}
+            color={theme.colors["primary-color"]}
+          />
+          <TextView
+            color={"interactive-text-1"}
+            textAlign={"center"}
+            variant={"variant-3-medium"}
+          >
+            {tagList.find((tagItem) => tagItem.value === selectedTag)?.label || "Select tag"}
+          </TextView>
+        </Pressable>
       </Box>
 
       <Box
@@ -233,7 +265,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             label=""
             textVariant="variant-3-medium"
             borderRadius="m"
-            placeholder="Front card text"
+            placeholder="Front card text *"
             onChangeText={(text) => {
               setTextTop(text);
               setTextTopError(undefined);
@@ -243,7 +275,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             error={textTopError}
             paddingBottom={"1"}
           />
-          <CharacterCounter current={textTop.length} max={99} />
+          <CharacterCounter
+            current={textTop.length}
+            max={99}
+          />
         </Box>
         <Box
           width={"100%"}
@@ -266,7 +301,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             flexGrow={1}
             textVariant="variant-3-medium"
             borderRadius="m"
-            placeholder="Back card text"
+            placeholder="Back card text *"
             paddingBottom={"1"}
             onChangeText={(text) => {
               setTextBottom(text);
@@ -275,7 +310,10 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
             value={textBottom}
             error={textBottomError}
           />
-          <CharacterCounter current={textBottom.length} max={99} />
+          <CharacterCounter
+            current={textBottom.length}
+            max={99}
+          />
         </Box>
       </Box>
       <Button
@@ -284,6 +322,20 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         width="l"
         textVariant="variant-2-bold"
         variant="primary"
+      />
+      <SelectSetDrawer
+        visible={isSelectSetVisible}
+        currentSet={selectedSet}
+        onClose={() => setIsSelectSetVisible(false)}
+        sets={sets}
+        onSetSelect={handleSetSelection}
+      />
+      <SelectTagDrawer
+        visible={isSelectTagVisible}
+        currentTag={selectedTag}
+        onClose={() => setIsSelectTagVisible(false)}
+        tagList={tagList}
+        onSetSelect={handleTagSelection}
       />
     </Box>
   );

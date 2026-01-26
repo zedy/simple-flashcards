@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import { PencilIcon, Trash2Icon } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
 
 import { type Card, useSetsStore } from "@/stores/useSetsStore";
 
@@ -9,16 +8,14 @@ import Box from "./Box";
 import IconButton from "./buttons/IconButton";
 import { DeleteCardConfirmModal } from "./modals/content/DeleteCardConfirmModal";
 import Modal from "./modals/Modal";
-import TextView from "./text/Text";
 
 interface CardActionsProps {
   card: Card;
   onCardDeleted?: () => void;
   returnTo?: "play" | "setcard";
-  text: string;
 }
 
-export const CardActions = ({ card, onCardDeleted, returnTo = "setcard", text }: CardActionsProps) => {
+export const CardActions = ({ card, onCardDeleted, returnTo = "setcard" }: CardActionsProps) => {
   const router = useRouter();
   const { deleteCard } = useSetsStore();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -43,9 +40,7 @@ export const CardActions = ({ card, onCardDeleted, returnTo = "setcard", text }:
         width={"100%"}
         flexDirection={"row"}
         justifyContent={"space-between"}
-        backgroundColor={"elevation-background-1"}
-        style={styles.icon}
-        zIndex={1}
+        backgroundColor={"transparent"}
       >
         <IconButton
           onPress={handleEditCard}
@@ -55,14 +50,6 @@ export const CardActions = ({ card, onCardDeleted, returnTo = "setcard", text }:
           iconColor={"interactive-primary-text-idle"}
           iconSize={22}
         />
-        <TextView
-          variant="variant-1"
-          color="interactive-primary-text-pressed"
-          textAlign="center"
-          marginTop="4"
-        >
-          {text}
-        </TextView>
         <IconButton
           onPress={handleDeleteCard}
           variant={"transparent"}
@@ -86,10 +73,3 @@ export const CardActions = ({ card, onCardDeleted, returnTo = "setcard", text }:
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  icon: {
-    position: "absolute",
-    top: 10,
-  },
-});

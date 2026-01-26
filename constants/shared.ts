@@ -7,7 +7,7 @@ export const SPLASH_FADE_IN_DURATION = 150;
 // List Item Animations
 export const LIST_ITEM_FADE_OUT_DURATION = 150;
 export const LIST_ITEM_LAYOUT_DELAY = 130;
-export const LIST_ITEM_SPRING_DAMPING = 15;
+export const LIST_ITEM_SPRING_DAMPING = 25;
 export const LIST_ITEM_SPRING_STIFFNESS = 150;
 
 // Card Flip Animation (DoubleCards)

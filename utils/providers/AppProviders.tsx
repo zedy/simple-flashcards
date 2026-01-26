@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native
 import { ThemeProvider as RestyleThemeProvider } from "@shopify/restyle";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import type { FC, PropsWithChildren } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -46,11 +47,16 @@ const NavigationThemeProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
+const GestureHandlerProvider: FC<PropsWithChildren> = ({ children }) => {
+  return <GestureHandlerRootView style={{ flex: 1 }}>{children}</GestureHandlerRootView>;
+};
+
 /**
  *  The order of the providers is significant
  *  NOTE: If you need to change the order, DO IT CAREFULLY!
  */
 const providers = [
+  GestureHandlerProvider,
   SafeAreaProvider,
   RestyleProvider,
   NavigationThemeProvider,

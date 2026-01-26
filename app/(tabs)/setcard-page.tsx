@@ -111,6 +111,7 @@ export default function SetCardPage() {
         padding={"4"}
         paddingBottom={"0"}
         flexDirection={"row"}
+        alignItems={"flex-end"}
         gap={"2"}
         backgroundColor={"elevation-background-3"}
       >
@@ -121,6 +122,7 @@ export default function SetCardPage() {
           placeholder="Search for a card"
           value={search}
           flexGrow={1}
+          alignItems={"center"}
           width={"auto"}
           rightElement={
             <IconButton
@@ -134,6 +136,7 @@ export default function SetCardPage() {
         <Box
           position="relative"
           pointerEvents="box-none"
+          paddingBottom={"1"}
         >
           <IconButton
             icon={<FilterIcon />}

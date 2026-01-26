@@ -21,7 +21,7 @@ export const showToast = ({
 
   Toast.show({
     type: "customToast",
-    position: "bottom",
+    position: "top",
     bottomOffset: parsedOffset,
     visibilityTime: 3000,
     autoHide: true,

@@ -44,53 +44,33 @@ export default function Header({
       paddingVertical="4"
       flexDirection="row"
       alignItems="center"
-      height={68}
+      height={112}
       justifyContent="space-between"
       style={{ boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px` }}
       zIndex={1}
+      paddingTop={"16"}
     >
       <Box width={40}>
         {showBackButton && (
           <TouchableOpacity onPress={handleBackPress}>
-            <ChevronLeft
-              size={24}
-              color={theme.colors["interactive-text-1"]}
-            />
+            <ChevronLeft size={24} color={theme.colors["interactive-text-1"]} />
           </TouchableOpacity>
         )}
-        {showLogo && (
-          <Logo
-            width={32}
-            height={32}
-          />
-        )}
+        {showLogo && <Logo width={32} height={32} />}
       </Box>
 
-      <Box
-        flexDirection={"row"}
-        alignItems="center"
-        gap={"2"}
-      >
-        <TextView
-          variant="variant-4-bold"
-          color="interactive-text-1"
-        >
+      <Box flexDirection={"row"} alignItems="center" gap={"2"}>
+        <TextView variant="variant-4-bold" color="interactive-text-1">
           {title}
         </TextView>
         {titleSuffix && (
-          <TextView
-            variant="variant-4-bold"
-            color="interactive-border-1"
-          >
+          <TextView variant="variant-4-bold" color="interactive-border-1">
             {titleSuffix}
           </TextView>
         )}
       </Box>
 
-      <Box
-        width={40}
-        alignItems="flex-end"
-      >
+      <Box width={40} alignItems="flex-end">
         {children}
       </Box>
     </Box>

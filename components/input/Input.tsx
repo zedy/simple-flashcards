@@ -1,6 +1,6 @@
 import { type BoxProps, useTheme } from "@shopify/restyle";
 import React, { type ReactNode, useCallback, useRef, useState } from "react";
-import { ActivityIndicator, Platform, type TextInput as RNTextInput } from "react-native";
+import { ActivityIndicator, type TextInput as RNTextInput } from "react-native";
 
 import type { InputVariant } from "@/types";
 import { getInputBackgroundColor, getInputBorderColor, getInputInputColor, getInputLabelColor } from "@/utils/inputs";
@@ -47,175 +47,193 @@ export interface InputProps extends BoxProps<Theme> {
   autoCorrect?: boolean;
 }
 
-const Input = React.forwardRef<RNTextInput, InputProps>(({
-  variant = "outlined",
-  type = "input",
-  placeholder,
-  leftElement,
-  rightElement,
-  label,
-  required,
-  helperText,
-  disabled,
-  loading,
-  onChangeText,
-  value,
-  error,
-  tooltipText,
-  onPress,
-  limit,
-  textVariant = "variant-input",
-  onSubmitEditing,
-  borderRadius,
-  borderColor: customBorderColor,
-  backgroundColor: customBackgroundColor,
-  ...rest
-}, ref) => {
-  const theme = useTheme<Theme>();
-  const [active, setActive] = useState(false);
-  const inputRef = useRef<RNTextInput>(null);
-
-  // Expose the ref to parent components
-  React.useImperativeHandle(ref, () => ({
-    focus: () => {
-      inputRef.current?.focus();
+const Input = React.forwardRef<RNTextInput, InputProps>(
+  (
+    {
+      variant = "outlined",
+      type = "input",
+      placeholder,
+      leftElement,
+      rightElement,
+      label,
+      required,
+      helperText,
+      disabled,
+      loading,
+      onChangeText,
+      value,
+      error,
+      tooltipText,
+      onPress,
+      limit,
+      textVariant = "variant-input",
+      onSubmitEditing,
+      borderRadius,
+      borderColor: customBorderColor,
+      backgroundColor: customBackgroundColor,
+      ...rest
     },
-    blur: () => {
-      inputRef.current?.blur();
-    },
-    clear: () => {
-      inputRef.current?.clear();
-    },
-    isFocused: () => inputRef.current?.isFocused() ?? false,
-    setNativeProps: (props) => inputRef.current?.setNativeProps(props),
-  } as RNTextInput), []);
+    ref
+  ) => {
+    const theme = useTheme<Theme>();
+    const [active, setActive] = useState(false);
+    const inputRef = useRef<RNTextInput>(null);
 
-  const handleFocus = () => {
-    inputRef?.current?.focus();
-  };
+    // Expose the ref to parent components
+    React.useImperativeHandle(
+      ref,
+      () =>
+        ({
+          focus: () => {
+            inputRef.current?.focus();
+          },
+          blur: () => {
+            inputRef.current?.blur();
+          },
+          clear: () => {
+            inputRef.current?.clear();
+          },
+          isFocused: () => inputRef.current?.isFocused() ?? false,
+          setNativeProps: (props) => inputRef.current?.setNativeProps(props),
+        }) as RNTextInput,
+      []
+    );
 
-  const getBackgroundColor = useCallback(
-    (active: boolean): ThemeColor => getInputBackgroundColor(theme, variant, disabled, active, error),
-    [theme, variant, disabled, error]
-  );
+    const handleFocus = () => {
+      inputRef?.current?.focus();
+    };
 
-  const getBorderColor = useCallback(
-    (active: boolean): ThemeColor => getInputBorderColor(theme, variant, disabled, active, error),
-    [theme, variant, disabled, error]
-  );
+    const getBackgroundColor = useCallback(
+      (active: boolean): ThemeColor => getInputBackgroundColor(theme, variant, disabled, active, error),
+      [theme, variant, disabled, error]
+    );
 
-  const getLabelColor = useCallback(
-    (active: boolean): ThemeColor => getInputLabelColor(theme, variant, disabled, active, error),
-    [theme, variant, disabled, error]
-  );
+    const getBorderColor = useCallback(
+      (active: boolean): ThemeColor => getInputBorderColor(theme, variant, disabled, active, error),
+      [theme, variant, disabled, error]
+    );
 
-  const getInputColor = useCallback(
-    (active: boolean): ThemeColor => getInputInputColor(theme, variant, disabled, active, error),
-    [theme, variant, disabled, error]
-  );
+    const getLabelColor = useCallback(
+      (active: boolean): ThemeColor => getInputLabelColor(theme, variant, disabled, active, error),
+      [theme, variant, disabled, error]
+    );
 
-  const backgroundColor = customBackgroundColor ?? getBackgroundColor(active);
-  const borderColor = customBorderColor ?? getBorderColor(active);
-  const labelColor = getLabelColor(active);
-  const inputColor = getInputColor(active);
-  const placeholderTextColor = "interactive-primary-text-pressed";
-  const { marginVertical = "0", ...pressableProps } = rest;
+    const getInputColor = useCallback(
+      (active: boolean): ThemeColor => getInputInputColor(theme, variant, disabled, active, error),
+      [theme, variant, disabled, error]
+    );
 
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${label} - outer`}
-      onPress={handleFocus}
-      width="100%"
-      onPressIn={onPress}
-      {...pressableProps}
-    >
-      <Box flexDirection="row" alignItems="center">
-        <Text variant="variant-3" color={labelColor} paddingBottom={"1"}>
-          {label}
-        </Text>
-        <Box flexDirection="row" alignItems="center">
-          {required && <Text color="informational-error">*</Text>}
-        </Box>
-      </Box>
-      {helperText && (
-        <Text variant="variant-3" color="text-default-secondary">
-          {helperText}
-        </Text>
-      )}
-      <Box
-        flexDirection="row"
-        alignItems={type === "textArea" ? "flex-start" : "center"}
-        gap="2"
-        marginVertical={marginVertical}
-        backgroundColor={backgroundColor}
-        borderColor={borderColor}
-        borderWidth={1}
-        borderRadius={"rounding-button-rounding"}
-        height={type === "textArea" ? "100%" : 54}
-        paddingHorizontal={"height-height-m"}
-        paddingVertical={
-          variant === "outlined"
-            ? "4"
-            : type === "textArea"
-              ? "height-height-s"
-              : Platform.select({ default: undefined, ios: "height-height-m" })
-        }
-      >
-        {leftElement && type !== "textArea" && <Box>{leftElement}</Box>}
-        <TextInput
-          ref={inputRef}
-          flex={1}
-          onFocus={() => setActive(true)}
-          onBlur={() => setActive(false)}
-          onChangeText={onChangeText}
-          onPressIn={onPress}
-          value={value}
-          editable={!disabled && !onPress}
-          accessibilityLabel={label}
-          placeholder={placeholder}
-          placeholderTextColor={theme.colors[placeholderTextColor]}
-          style={{
-            color: theme.colors[inputColor],
-            fontSize: theme.textVariants[textVariant].fontSize,
-            fontFamily: theme.textVariants[textVariant].fontFamily,
-            paddingVertical: 0,
-            outline: "none",
-            height: type === "textArea" ? "100%" : "auto"
-          }}
-          multiline={type === "textArea"}
-          textAlignVertical={type === "textArea" ? "top" : "center"}
-          onSubmitEditing={onSubmitEditing}
-          {...rest}
-        />
-        {rightElement && !loading && type !== "textArea" && <Box>{rightElement}</Box>}
-        {loading && (
-          <Box>
-            <ActivityIndicator accessible accessibilityRole="spinbutton" accessibilityLabel={`${label} - loading...`} />
-          </Box>
-        )}
-      </Box>
-      <Box
-        position="absolute"
-        bottom={-22}
-        flexDirection="row"
-        alignItems="flex-start"
-        justifyContent="space-between"
-        gap="1"
+    const backgroundColor = customBackgroundColor ?? getBackgroundColor(active);
+    const borderColor = customBorderColor ?? getBorderColor(active);
+    const labelColor = getLabelColor(active);
+    const inputColor = getInputColor(active);
+    const placeholderTextColor = "interactive-primary-text-pressed";
+    const { marginVertical = "0", ...pressableProps } = rest;
+
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${label} - outer`}
+        onPress={handleFocus}
         width="100%"
+        onPressIn={onPress}
+        {...pressableProps}
       >
-        <Box flexShrink={1}>
-          {error && (
-            <Text variant="variant-1" color="informational-error">
-              {error}
-            </Text>
+        {label && <Box flexDirection="row" alignItems="center">
+          <Text variant="variant-3" color={labelColor} paddingBottom={"1"}>
+            {label}
+          </Text>
+          <Box flexDirection="row" alignItems="center">
+            {required && <Text color="informational-error">*</Text>}
+          </Box>
+        </Box>}
+        {helperText && (
+          <Text variant="variant-3" color="text-default-secondary">
+            {helperText}
+          </Text>
+        )}
+        <Box
+          flexDirection="row"
+          alignItems={type === "textArea" ? "flex-start" : "center"}
+          gap="2"
+          marginVertical={marginVertical}
+          backgroundColor={backgroundColor}
+          borderColor={borderColor}
+          borderWidth={1}
+          borderRadius={"rounding-button-rounding"}
+          height={type === "textArea" ? "auto" : 54}
+          flexGrow={type === "textArea" ? 1 : 0}
+          paddingHorizontal={"height-height-m"}
+          // paddingVertical={
+          //   variant === "outlined"
+          //     ? "4"
+          //     : type === "textArea"
+          //       ? "height-height-s"
+          //       : Platform.select({ default: undefined, ios: "height-height-m" })
+          // }
+          paddingBottom={"0"}
+          paddingVertical={type === "textArea" ? "2" : "0"}
+        >
+          {leftElement && type !== "textArea" && <Box>{leftElement}</Box>}
+          <TextInput
+            ref={inputRef}
+            flex={1}
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
+            onChangeText={onChangeText}
+            onPressIn={onPress}
+            value={value}
+            editable={!disabled && !onPress}
+            accessibilityLabel={label}
+            placeholder={placeholder}
+            placeholderTextColor={theme.colors[placeholderTextColor]}
+            style={{
+              color: theme.colors[inputColor],
+              fontSize: theme.textVariants[textVariant].fontSize,
+              fontFamily: theme.textVariants[textVariant].fontFamily,
+              lineHeight: theme.textVariants[textVariant].lineHeight,
+              paddingVertical: 0,
+              outline: "none",
+              height: type === "textArea" ? "100%" : "auto",
+            }}
+            multiline={type === "textArea"}
+            textAlignVertical={type === "textArea" ? "top" : "center"}
+            onSubmitEditing={onSubmitEditing}
+            {...rest}
+          />
+          {rightElement && !loading && type !== "textArea" && <Box>{rightElement}</Box>}
+          {loading && (
+            <Box>
+              <ActivityIndicator
+                accessible
+                accessibilityRole="spinbutton"
+                accessibilityLabel={`${label} - loading...`}
+              />
+            </Box>
           )}
         </Box>
-      </Box>
-    </Pressable>
-  );
-});
+        <Box
+          position="absolute"
+          bottom={-22}
+          flexDirection="row"
+          alignItems="flex-start"
+          justifyContent="space-between"
+          gap="1"
+          width="100%"
+        >
+          <Box flexShrink={1}>
+            {error && (
+              <Text variant="variant-1" color="informational-error">
+                {error}
+              </Text>
+            )}
+          </Box>
+        </Box>
+      </Pressable>
+    );
+  }
+);
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export default Input;

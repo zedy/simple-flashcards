@@ -1,7 +1,7 @@
 import { useTheme } from "@shopify/restyle";
 import { ChevronLeft, ChevronRight, RotateCcw, Shuffle } from "lucide-react-native";
 import React from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
@@ -11,11 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import {
-  CARD_FLIP_DURATION,
-  CARD_SWIPE_RESET_DURATION,
-  PROGRESS_BAR_ANIMATION_DURATION,
-} from "@/constants/shared";
+import { CARD_FLIP_DURATION, CARD_SWIPE_RESET_DURATION, PROGRESS_BAR_ANIMATION_DURATION } from "@/constants/shared";
 import type { Card } from "@/stores/useSetsStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
@@ -23,6 +19,7 @@ import type { Theme, ThemeColor } from "@/utils/theme/restyleTheme";
 import Box from "./Box";
 import IconButton from "./buttons/IconButton";
 import { CardActions } from "./CardActions";
+import { SingleCard } from "./SingleCard";
 import TextView from "./text/Text";
 
 interface DoubleCardsProps {
@@ -130,7 +127,7 @@ export const DoubleCards = ({
   const cardStyle = {
     ...styles.card,
     backgroundColor: theme.colors["elevation-background-1"],
-    boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px`
+    boxShadow: `${theme.colors["shadow-medium"]} 0px 4px 4px 0px`,
   };
 
   return (
@@ -143,7 +140,7 @@ export const DoubleCards = ({
         <Box
           width="100%"
           gap="2"
-          >
+        >
           <Box
             height={8}
             backgroundColor="elevation-background-1"
@@ -170,7 +167,11 @@ export const DoubleCards = ({
           </TextView>
         </Box>
       )}
-
+      <CardActions
+        card={card}
+        onCardDeleted={onCardDeleted}
+        returnTo={returnTo}
+      />
       <GestureDetector gesture={panGesture}>
         <Animated.View style={[styles.cardContainer, swipeStyle]}>
           <Pressable
@@ -178,50 +179,22 @@ export const DoubleCards = ({
             style={styles.cardPressable}
           >
             <Animated.View style={[cardStyle, styles.cardFront, animatedCardStyle]}>
-              <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="front" />
-              <ScrollView
-                style={styles.cardScrollView}
-                contentContainerStyle={styles.cardScrollContent}
-                showsVerticalScrollIndicator={true}
-              >
-                <TextView
-                  variant="variant-4"
-                  color="interactive-text-1"
-                  textAlign="center"
-                  width={"100%"}
-                >
-                  {card.topText}
-                </TextView>
-                <TextView
-                  variant="variant-1"
-                  color="interactive-primary-text-pressed"
-                  textAlign="center"
-                  marginTop="4"
-                >
-                  Tap to flip
-                </TextView>
-              </ScrollView>
+              <SingleCard
+                text={card.topText}
+                isFront
+              />
             </Animated.View>
 
             <Animated.View style={[cardStyle, styles.cardBack, animatedBackStyle]}>
-              <CardActions card={card} onCardDeleted={onCardDeleted} returnTo={returnTo} text="back" />
-              <ScrollView
-                style={styles.cardScrollView}
-                contentContainerStyle={styles.cardScrollContent}
-                showsVerticalScrollIndicator={true}
-              >
-                <TextView
-                  variant="variant-4"
-                  color="interactive-text-1"
-                  textAlign="center"
-                  width={"100%"}
-                >
-                  {card.bottomText}
-                </TextView>
-              </ScrollView>
+              <SingleCard text={card.bottomText} />
             </Animated.View>
           </Pressable>
-          <Box flexDirection={"row"} alignSelf={"flex-start"} paddingTop={"2"} height={24}>
+          <Box
+            flexDirection={"row"}
+            alignSelf={"flex-start"}
+            paddingTop={"2"}
+            height={24}
+          >
             <TextView
               variant="variant-2-medium"
               color="interactive-primary-text-pressed"
@@ -326,5 +299,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 20,
+  },
+  cardText: {
+    position: "absolute",
+    top: 10,
   },
 });

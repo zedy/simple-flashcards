@@ -1,3 +1,4 @@
+import { useTheme } from "@shopify/restyle";
 import { Clipboard } from "lucide-react-native";
 import React from "react";
 import { StyleSheet } from "react-native";
@@ -15,6 +16,7 @@ import {
   LIST_ITEM_SPRING_STIFFNESS,
 } from "@/constants/shared";
 import { type FlashcardSet, useSetsStore } from "@/stores/useSetsStore";
+import type { Theme } from "@/utils/theme/restyleTheme";
 
 interface SetCardListProps {
   toggleModal: (open: boolean) => void;
@@ -23,6 +25,7 @@ interface SetCardListProps {
 
 export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
   const { cards } = useSetsStore();
+  const theme = useTheme<Theme>();
   const [openCardId, setOpenCardId] = React.useState<string | null>(null);
 
   const handleAddNewSet = () => {
@@ -47,9 +50,16 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
       gap={"4"}
     >
       {sets.length === 0 ? (
-        <Box flex={1} gap={"4"}>
-          <Box flex={1} justifyContent={"center"}
-          alignItems={"center"} gap={"4"}>
+        <Box
+          flex={1}
+          gap={"4"}
+        >
+          <Box
+            flex={1}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={"4"}
+          >
             <Box
               width={"100%"}
               justifyContent={"center"}
@@ -58,7 +68,7 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
               <Clipboard
                 width={128}
                 height={128}
-                color={"#DBDBDB"}
+                color={theme.colors["fallback-icon-idle"]}
               />
             </Box>
             <TextView
@@ -103,7 +113,7 @@ export const SetCardList = ({ toggleModal, sets }: SetCardListProps) => {
       )}
     </Box>
   );
-}
+};
 
 const styles = StyleSheet.create({
   addNewSetBtn: {
