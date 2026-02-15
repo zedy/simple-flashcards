@@ -106,59 +106,61 @@ export default function SetCardPage() {
           iconSize={24}
         />
       </Header>
-      <Box
-        width={"100%"}
-        padding={"4"}
-        paddingBottom={"0"}
-        flexDirection={"row"}
-        alignItems={"flex-end"}
-        gap={"2"}
-        backgroundColor={"elevation-background-3"}
-      >
-        <Input
-          onChangeText={setSearch}
-          variant="outlined"
-          label=""
-          placeholder="Search for a card"
-          value={search}
-          flexGrow={1}
-          alignItems={"center"}
-          width={"auto"}
-          rightElement={
-            <IconButton
-              iconColor={"interactive-text-1"}
-              icon={<X size={24} />}
-              onPress={handleClearSearch}
-              variant="transparent"
-            />
-          }
-        />
+      {cards.length > 0 && (
         <Box
-          position="relative"
-          pointerEvents="box-none"
-          paddingBottom={"1"}
+          width={"100%"}
+          padding={"4"}
+          paddingBottom={"0"}
+          flexDirection={"row"}
+          alignItems={"flex-end"}
+          gap={"2"}
+          backgroundColor={"elevation-background-3"}
         >
-          <IconButton
-            icon={<FilterIcon />}
-            iconColor={selectedTags.length > 0 ? "interactive-primary-text-idle" : "interactive-text-1"}
-            onPress={handleOpenFilter}
-            variant="transparent"
-            style={styles.filterIcon}
+          <Input
+            onChangeText={setSearch}
+            variant="outlined"
+            label=""
+            placeholder="Search for a card"
+            value={search}
+            flexGrow={1}
+            alignItems={"center"}
+            width={"auto"}
+            rightElement={
+              <IconButton
+                iconColor={"interactive-text-1"}
+                icon={<X size={24} />}
+                onPress={handleClearSearch}
+                variant="transparent"
+              />
+            }
           />
-          {selectedTags.length > 0 && (
-            <Box
-              position="absolute"
-              top={8}
-              right={8}
-              width={8}
-              height={8}
-              borderRadius="full"
-              backgroundColor="interactive-primary-bg-idle"
-              pointerEvents="none"
+          <Box
+            position="relative"
+            pointerEvents="box-none"
+            paddingBottom={"1"}
+          >
+            <IconButton
+              icon={<FilterIcon />}
+              iconColor={selectedTags.length > 0 ? "interactive-primary-text-idle" : "interactive-text-1"}
+              onPress={handleOpenFilter}
+              variant="transparent"
+              style={styles.filterIcon}
             />
-          )}
+            {selectedTags.length > 0 && (
+              <Box
+                position="absolute"
+                top={8}
+                right={8}
+                width={8}
+                height={8}
+                borderRadius="full"
+                backgroundColor="interactive-primary-bg-idle"
+                pointerEvents="none"
+              />
+            )}
+          </Box>
         </Box>
-      </Box>
+      )}
       <CardList
         cards={cards}
         setId={id}

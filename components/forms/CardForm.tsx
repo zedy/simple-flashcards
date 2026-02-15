@@ -3,6 +3,7 @@ import * as Crypto from "expo-crypto";
 import { useFocusEffect, useRouter } from "expo-router";
 import { LayoutGrid, RefreshCcw, TagIcon } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
+import { Keyboard } from "react-native";
 
 import Box from "@/components/Box";
 import Button from "@/components/buttons/Button";
@@ -116,14 +117,12 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
   };
 
   const handleAddCard = () => {
-    // Reset errors
     setSetError(undefined);
     setTextTopError(undefined);
     setTextBottomError(undefined);
 
     let hasError = false;
 
-    // Validation
     if (!selectedSet || selectedSet === "") {
       setSetError("Please select a set");
       showToast({
@@ -136,16 +135,16 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
     if (!textTop || textTop.trim().length === 0) {
       setTextTopError("Text must have at least 1 character");
       hasError = true;
-    } else if (textTop.length > 99) {
-      setTextTopError("Text must be at most 99 characters");
+    } else if (textTop.length > 299) {
+      setTextTopError("Text must be at most 299 characters");
       hasError = true;
     }
 
     if (!textBottom || textBottom.trim().length === 0) {
       setTextBottomError("Text must have at least 1 character");
       hasError = true;
-    } else if (textBottom.length > 99) {
-      setTextBottomError("Text must be at most 99 characters");
+    } else if (textBottom.length > 299) {
+      setTextBottomError("Text must be at most 299 characters");
       hasError = true;
     }
 
@@ -155,7 +154,6 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
 
     try {
       if (isEditMode && data) {
-        // Update existing card
         updateCard(data.id, {
           ...data,
           bottomText: textBottom,
@@ -175,7 +173,6 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
           router.push(`/(tabs)/setcard-page?id=${selectedSet}`);
         }
       } else {
-        // Add new card
         addCard({
           bottomText: textBottom,
           topText: textTop,
@@ -216,7 +213,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
         justifyContent={"space-around"}
       >
         <Pressable
-          onPress={() => setIsSelectSetVisible(true)}
+          onPress={() => { Keyboard.dismiss(); setIsSelectSetVisible(true); }}
           flexDirection={"row"}
           alignItems={"center"}
           gap={"2"}
@@ -234,7 +231,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
           </TextView>
         </Pressable>
         <Pressable
-          onPress={() => setIsSelectTagVisible(true)}
+          onPress={() => { Keyboard.dismiss(); setIsSelectTagVisible(true); }}
           flexDirection={"row"}
           alignItems={"center"}
           gap={"2"}
@@ -277,7 +274,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
           />
           <CharacterCounter
             current={textTop.length}
-            max={99}
+            max={299}
           />
         </Box>
         <Box
@@ -312,7 +309,7 @@ export const CardForm = ({ data, prefilledSetId, returnTo = "setcard" }: CardFor
           />
           <CharacterCounter
             current={textBottom.length}
-            max={99}
+            max={299}
           />
         </Box>
       </Box>

@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "ts:check": "tsc",
-    "themegen": "npx tsx utils/theme/themegen/themegen.ts"
+    "themegen": "npx tsx utils/theme/themegen/themegen.ts",
+    "build": "TMPDIR=${BUILD_TMPDIR:-/home/alx/tmp} eas build --platform android --profile preview --local 2>&1 | tee build.log"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

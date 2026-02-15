@@ -5,6 +5,7 @@ import { Pressable, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -105,11 +106,11 @@ export const DoubleCards = ({
       if (event.translationX < -100 && !isLastCard) {
         // Swipe left - next card
         translateX.value = withTiming(0, { duration: CARD_SWIPE_RESET_DURATION });
-        onNext();
+        runOnJS(onNext)();
       } else if (event.translationX > 100 && !isFirstCard) {
         // Swipe right - previous card
         translateX.value = withTiming(0, { duration: CARD_SWIPE_RESET_DURATION });
-        onPrevious();
+        runOnJS(onPrevious)();
       } else {
         // Reset
         translateX.value = withSpring(0);

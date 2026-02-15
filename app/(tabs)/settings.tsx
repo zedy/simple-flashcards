@@ -7,6 +7,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import Constants from "expo-constants";
+
 import Box from "@/components/Box";
 import IconButton from "@/components/buttons/IconButton";
 import Toggle from "@/components/buttons/Toggle";
@@ -145,6 +147,11 @@ export default function SettingsScreen() {
             checked={settings.showProgressBar}
           />
         </Box>
+      </Box>
+      <Box alignItems="center" paddingBottom="5">
+        <TextView variant="variant-3-bold" color="interactive-primary-text-idle" opacity={0.4}>
+          v{Constants.expoConfig?.version}
+        </TextView>
       </Box>
     </AnimatedBox>
   );
